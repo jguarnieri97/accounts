@@ -12,7 +12,7 @@ import ar.edu.unlam.tpi.accounts.dto.response.ErrorResponseDto;
 public class AccountExceptionHandler {
     
     @ExceptionHandler(InternalException.class)
-    public ResponseEntity<?> handleEmptyException(InternalException ex) {
+    public ResponseEntity<ErrorResponseDto> handleEmptyException(InternalException ex) {
         return ResponseEntity
         .status(ex.getCode())
         .body(ErrorResponseDto.builder()
@@ -23,7 +23,7 @@ public class AccountExceptionHandler {
     }
 
     @ExceptionHandler(NotFoundException.class)
-    public ResponseEntity<?> handleNotFoundException(NotFoundException ex) {
+    public ResponseEntity<ErrorResponseDto> handleNotFoundException(NotFoundException ex) {
         return ResponseEntity
         .status(ex.getCode())
         .body(ErrorResponseDto.builder()

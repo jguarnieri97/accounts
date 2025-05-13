@@ -1,11 +1,13 @@
 package ar.edu.unlam.tpi.accounts.controller;
 
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import java.util.List;
 
@@ -14,7 +16,7 @@ import ar.edu.unlam.tpi.accounts.dto.response.WorkerResponseDto;
 import ar.edu.unlam.tpi.accounts.dto.request.MetricRequestDto;
 import ar.edu.unlam.tpi.accounts.dto.response.MessageResponseDto;
 import ar.edu.unlam.tpi.accounts.service.AccountService;
-
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -26,27 +28,35 @@ public class AccountController {
     private final AccountService accountService;
 
     @GetMapping
-    public ResponseEntity<List<SupplierResponseDto>> getAllSuppliers() {
-        return ResponseEntity.ok(accountService.searchAllSuppliers());
+    @ResponseStatus(HttpStatus.OK)
+    @Operation(summary = "Get all suppliers")
+    public List<SupplierResponseDto> getAllSuppliers() {
+        return accountService.searchAllSuppliers();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<SupplierResponseDto> getSupplierById(@PathVariable Long id) {
-        return ResponseEntity.ok(accountService.searchSupplierById(id));
+    @ResponseStatus(HttpStatus.OK)
+    @Operation(summary = "Get supplier by ID")
+    public SupplierResponseDto getSupplierById(@PathVariable Long id) {
+        return accountService.searchSupplierById(id);
     }
 
     @PutMapping("/metrics/{id}")
-    public ResponseEntity<MessageResponseDto> putSupplierMetrics(@PathVariable("id") Long supplierId, @RequestBody MetricRequestDto metrics) {
+    @ResponseStatus(HttpStatus.OK)
+    @Operation(summary = "Update supplier metrics")
+    public MessageResponseDto putSupplierMetrics(@PathVariable("id") Long supplierId, @RequestBody MetricRequestDto metrics) {
         accountService.updateSupplierMetrics(supplierId,metrics);
-        return ResponseEntity.ok(MessageResponseDto.builder()
+        return MessageResponseDto.builder()
             .code(200)
             .message("UPDATED")
             .data(null)
-            .build());
+            .build();
     }
 
     @GetMapping("/{id}/workers")
-    public ResponseEntity<List<WorkerResponseDto>> getWorkersBySupplierCompanyId(@PathVariable Long id) {
-        return ResponseEntity.ok(accountService.searchWorkersBySupplierCompanyId(id));
+    @ResponseStatus(HttpStatus.OK)
+    @Operation(summary = "Get workers by supplier company ID")
+    public List<WorkerResponseDto> getWorkersBySupplierCompanyId(@PathVariable Long id) {
+        return accountService.searchWorkersBySupplierCompanyId(id);
     }
 }
