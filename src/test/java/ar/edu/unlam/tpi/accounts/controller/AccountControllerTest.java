@@ -35,7 +35,7 @@ public class AccountControllerTest {
         mockMvc.perform(get("/accounts/v1/suppliers/{id}", 1L))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-            .andExpect(jsonPath("$.id").value(1L));
+            .andExpect(jsonPath("$.data.id").value(1L));
     }
 
     @Test
@@ -57,6 +57,6 @@ public class AccountControllerTest {
         mockMvc.perform(get("/accounts/v1/suppliers/{id}/workers", 1L))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-            .andExpect(jsonPath("$").isArray());
+            .andExpect(jsonPath("$.data").isArray());
     }
 }

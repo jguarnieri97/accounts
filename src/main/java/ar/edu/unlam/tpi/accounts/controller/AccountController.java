@@ -1,62 +1,69 @@
 package ar.edu.unlam.tpi.accounts.controller;
-
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import ar.edu.unlam.tpi.accounts.dto.request.MetricRequestDto;
+import ar.edu.unlam.tpi.accounts.dto.response.SupplierResponseDto;
+import ar.edu.unlam.tpi.accounts.dto.response.WorkerResponseDto;
+import ar.edu.unlam.tpi.accounts.dto.response.GenericResponse;
+import io.swagger.v3.oas.annotations.Operation;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import java.util.List;
 
-import ar.edu.unlam.tpi.accounts.dto.response.SupplierResponseDto;
-import ar.edu.unlam.tpi.accounts.dto.response.WorkerResponseDto;
-import ar.edu.unlam.tpi.accounts.dto.request.MetricRequestDto;
-import ar.edu.unlam.tpi.accounts.dto.response.MessageResponseDto;
-import ar.edu.unlam.tpi.accounts.service.AccountService;
-import io.swagger.v3.oas.annotations.Operation;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
-@RestController
+ 
+/**
+ * Controlador de endpoints relacionados con proveedores y sus métricas o trabajadores.
+ */
+
 @RequestMapping("/accounts/v1/suppliers")
-@RequiredArgsConstructor
-@Slf4j
-public class AccountController {
-    private final AccountService accountService;
+public interface AccountController {
 
+    /**
+     * Obtiene todos los proveedores disponibles en el sistema.
+     *
+     * @return una respuesta genérica conteniendo una lista de proveedores.
+     */
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Get all suppliers")
-    public List<SupplierResponseDto> getAllSuppliers() {
-        return accountService.searchAllSuppliers();
-    }
+    GenericResponse<List<SupplierResponseDto>> getAllSuppliers();
 
+    /**
+     * Busca un proveedor por su ID.
+     *
+     * @param id el identificador único del proveedor.
+     * @return una respuesta genérica conteniendo los datos del proveedor.
+     */
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Get supplier by ID")
-    public SupplierResponseDto getSupplierById(@PathVariable Long id) {
-        return accountService.searchSupplierById(id);
-    }
+    GenericResponse<SupplierResponseDto> getSupplierById(@PathVariable Long id);
 
+    /**
+     * Actualiza las métricas de un proveedor específico.
+     *
+     * @param supplierId el ID del proveedor a actualizar.
+     * @param metrics objeto con las nuevas métricas del proveedor.
+     * @return una respuesta genérica indicando el estado de la operación.
+     */
     @PutMapping("/metrics/{id}")
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Update supplier metrics")
-    public MessageResponseDto putSupplierMetrics(@PathVariable("id") Long supplierId, @RequestBody MetricRequestDto metrics) {
-        accountService.updateSupplierMetrics(supplierId,metrics);
-        return MessageResponseDto.builder()
-            .code(200)
-            .message("UPDATED")
-            .data(null)
-            .build();
-    }
+    GenericResponse<Void> putSupplierMetrics(@PathVariable("id") Long supplierId, @RequestBody MetricRequestDto metrics);
 
+    /**
+     * Obtiene los trabajadores asociados a una empresa proveedora por su ID.
+     *
+     * @param id el ID de la empresa proveedora.
+     * @return una respuesta genérica conteniendo la lista de trabajadores asociados.
+     */
     @GetMapping("/{id}/workers")
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Get workers by supplier company ID")
-    public List<WorkerResponseDto> getWorkersBySupplierCompanyId(@PathVariable Long id) {
-        return accountService.searchWorkersBySupplierCompanyId(id);
-    }
+    GenericResponse<List<WorkerResponseDto>> getWorkersBySupplierCompanyId(@PathVariable Long id);
+
 }
