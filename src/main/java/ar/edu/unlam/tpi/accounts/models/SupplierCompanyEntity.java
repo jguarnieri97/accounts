@@ -26,8 +26,6 @@ public class SupplierCompanyEntity extends CompanyEntity {
     private Float avgPrice;
     private Float score;
 
-    @OneToOne
-    @JoinColumn(name = "company_type_id")
     private CompanyTypeEntity companyType;
     
     @OneToMany(mappedBy = "supplierCompany", orphanRemoval = true)
