@@ -10,14 +10,14 @@ public class ApplicantCompanyDataHelper {
     public static List<ApplicantCompanyEntity> getApplicantCompanyList() {
         return List.of(
             ApplicantCompanyEntity.builder()
-                .name("Nexwork")
+                .name("Logibyte")
                 .isVerified(true)
                 .isActive(true)
                 .cuit("20-12345678-9")
-                .email("nx@gmail.com")
-                .phone("1231231")
-                .description("Nexwork is a leading technology company.")
-                .address("123 Nexwork St, Tech City")
+                .email("employee@lobibyte.com")
+                .phone("+54 11 1234-5678")
+                .description("Logibyte is a leading technology company.")
+                .address("Av. Alberdi 35199, Buenos Aires")
                 .build(),
             ApplicantCompanyEntity.builder()
                 .name("Tech Innovators")
