@@ -6,4 +6,5 @@ import ar.edu.unlam.tpi.accounts.dto.response.UserDetailResponse;
 public interface UserService {
 
     UserDetailResponse getUserDetail(UserDetailRequest userDetailRequest);
+
 }

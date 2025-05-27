@@ -1,5 +1,6 @@
 package ar.edu.unlam.tpi.accounts.controller.impl;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -17,14 +18,16 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
+@Tag(name = "Account Controller", description = "Operaciones relacionadas con cuentas")
 public class AccountControllerImpl implements AccountController {
+
     private final AccountService accountService;
     
     @Override
     public GenericResponse<List<SupplierResponseDto>> getAllSuppliers() {
         return GenericResponse.<List<SupplierResponseDto>>builder()
             .code(Constants.STATUS_OK)
-            .data(accountService.searchAllSuppliers())
+            .data(accountService.getAllSuppliers())
             .message(Constants.SUCCESS_MESSAGE)
             .build();
     }
@@ -34,7 +37,7 @@ public class AccountControllerImpl implements AccountController {
     public GenericResponse<SupplierResponseDto> getSupplierById(Long id) {
         return GenericResponse.<SupplierResponseDto>builder()
         .code(Constants.STATUS_OK)
-        .data(accountService.searchSupplierById(id))
+        .data(accountService.getSupplierById(id))
         .message(Constants.SUCCESS_MESSAGE)
         .build();
     }
@@ -54,7 +57,7 @@ public class AccountControllerImpl implements AccountController {
         return GenericResponse.<List<WorkerResponseDto>>builder()
             .code(Constants.STATUS_OK) 
             .message(Constants.SUCCESS_MESSAGE)
-            .data(accountService.searchWorkersBySupplierCompanyId(id))    
+            .data(accountService.getWorkersBySupplierCompanyId(id))
         .build();
     }
 

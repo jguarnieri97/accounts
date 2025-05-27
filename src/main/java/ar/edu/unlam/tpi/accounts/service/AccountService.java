@@ -16,7 +16,7 @@ public interface AccountService {
      *
      * @return una lista de objetos {@link SupplierResponseDto}.
      */
-    List<SupplierResponseDto> searchAllSuppliers();
+    List<SupplierResponseDto> getAllSuppliers();
 
     /**
      * Obtiene los detalles de un proveedor específico por su ID.
@@ -24,7 +24,7 @@ public interface AccountService {
      * @param id el identificador único del proveedor.
      * @return un objeto {@link SupplierResponseDto} con los datos del proveedor.
      */
-    SupplierResponseDto searchSupplierById(Long id);
+    SupplierResponseDto getSupplierById(Long id);
 
     /**
      * Obtiene los trabajadores asociados a una empresa proveedora específica.
@@ -32,7 +32,7 @@ public interface AccountService {
      * @param companyId el ID de la empresa proveedora.
      * @return una lista de objetos {@link WorkerResponseDto} correspondientes a los trabajadores.
      */
-    List<WorkerResponseDto> searchWorkersBySupplierCompanyId(Long companyId);
+    List<WorkerResponseDto> getWorkersBySupplierCompanyId(Long companyId);
 
     /**
      * Actualiza las métricas de un proveedor determinado.

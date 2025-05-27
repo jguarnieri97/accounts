@@ -3,10 +3,9 @@ package ar.edu.unlam.tpi.accounts.models;
 import java.util.Set;
 import java.util.HashSet;
 
+import ar.edu.unlam.tpi.accounts.commons.enums.CompanyTypeEnum;
 import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 import lombok.experimental.SuperBuilder;
@@ -26,7 +25,7 @@ public class SupplierCompanyEntity extends CompanyEntity {
     private Float avgPrice;
     private Float score;
 
-    private CompanyTypeEntity companyType;
+    private CompanyTypeEnum companyType;
     
     @OneToMany(mappedBy = "supplierCompany", orphanRemoval = true)
     private Set<CommentaryEntity> commentaries = new HashSet<>();

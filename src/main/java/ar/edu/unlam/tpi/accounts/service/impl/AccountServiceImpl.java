@@ -2,6 +2,7 @@ package ar.edu.unlam.tpi.accounts.service.impl;
 
 import ar.edu.unlam.tpi.accounts.service.AccountService;
 import ar.edu.unlam.tpi.accounts.utils.Converter;
+import ar.edu.unlam.tpi.accounts.utils.MetricsCalculator;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -9,13 +10,12 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import ar.edu.unlam.tpi.accounts.persistence.ApplicantCompanyDAO;
 import ar.edu.unlam.tpi.accounts.persistence.SupplierCompanyDAO;
 import ar.edu.unlam.tpi.accounts.persistence.WorkerDAO;
 import ar.edu.unlam.tpi.accounts.persistence.repository.CommentaryRepository;
-
-import lombok.extern.slf4j.Slf4j;
 
 import ar.edu.unlam.tpi.accounts.dto.request.MetricRequestDto;
 import ar.edu.unlam.tpi.accounts.dto.response.SupplierResponseDto;
@@ -34,10 +34,10 @@ public class AccountServiceImpl implements AccountService {
     private final WorkerDAO workerDAO;
     private final CommentaryRepository commentaryRepository;
     private final ApplicantCompanyDAO applicantCompanyDAO;
-
+    private final MetricsCalculator metricsCalculator;
 
     @Override
-    public List<SupplierResponseDto> searchAllSuppliers() {
+    public List<SupplierResponseDto> getAllSuppliers() {
         return supplierCompanyDAO.findAll()
             .stream()
             .map(supplier -> Converter.convertToDto(supplier, SupplierResponseDto.class))
@@ -45,13 +45,13 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public SupplierResponseDto searchSupplierById(Long id) {
+    public SupplierResponseDto getSupplierById(Long id) {
         SupplierCompanyEntity supplier = supplierCompanyDAO.findById(id);
         return Converter.convertToDto(supplier, SupplierResponseDto.class);
     }
 
     @Override
-    public List<WorkerResponseDto> searchWorkersBySupplierCompanyId(Long companyId) {
+    public List<WorkerResponseDto> getWorkersBySupplierCompanyId(Long companyId) {
         return workerDAO.findByCompanyId(companyId)
             .stream()
             .map(worker -> Converter.convertToDto(worker, WorkerResponseDto.class))
@@ -62,33 +62,20 @@ public class AccountServiceImpl implements AccountService {
     public void updateSupplierMetrics(Long supplierId, MetricRequestDto metrics) {
         SupplierCompanyEntity supplier = supplierCompanyDAO.findById(supplierId);
         supplier.setCommentsCount(supplier.getCommentsCount() + 1);
-        supplier.setAvgPrice(calculateAvgPrice(supplier, metrics.getPrice()));
-        supplier.setScore(calculateAvgScore(supplier, metrics.getScore()));
+        supplier.setAvgPrice(metricsCalculator.calculateAvgPrice(supplier, metrics.getPrice()));
+        supplier.setScore(metricsCalculator.calculateAvgScore(supplier, metrics.getScore()));
 
         ApplicantCompanyEntity applicant = applicantCompanyDAO.findById(metrics.getApplicantId());
 
         CommentaryEntity commentaryEntity = CommentaryEntity.builder()
-            .comment(metrics.getComment())
-            .score(metrics.getScore())
-            .supplierCompany(supplier)
-            .applicantCompany(applicant)
-            .build();
+                .comment(metrics.getComment())
+                .score(metrics.getScore())
+                .supplierCompany(supplier)
+                .applicantCompany(applicant)
+                .build();
 
-        commentaryEntity = commentaryRepository.save(commentaryEntity);
-
+        commentaryRepository.save(commentaryEntity);
         supplierCompanyDAO.save(supplier);
-    }
-
-    private Float calculateAvgPrice(SupplierCompanyEntity supplier, Integer price) {
-        float currentTotal = supplier.getAvgPrice() * (supplier.getCommentsCount()-1);
-        float newTotal = currentTotal + price;
-        return newTotal / supplier.getCommentsCount();
-    }
-    
-    private Float calculateAvgScore(SupplierCompanyEntity supplier, Double score) {
-        float currentTotal = supplier.getScore() * (supplier.getCommentsCount()-1);
-        float newTotal = currentTotal + score.floatValue();
-        return newTotal / supplier.getCommentsCount();
     }
     
 }
