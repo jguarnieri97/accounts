@@ -16,3 +16,10 @@ spring:
         path: /h2-console
 server:
   port: 8083
+
+logging:
+  level:
+    root: INFO
+    ar.edu.unlam.tpi.accounts: DEBUG
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %logger{36} - %msg%n"
