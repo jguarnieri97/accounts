@@ -1,4 +1,4 @@
-package ar.edu.unlam.tpi.accounts.service;
+package ar.edu.unlam.tpi.accounts.service.impl;
 
 import static org.mockito.Mockito.when;
 
@@ -14,11 +14,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import ar.edu.unlam.tpi.accounts.dto.response.SupplierResponseDto;
 import ar.edu.unlam.tpi.accounts.dto.response.WorkerResponseDto;
 import ar.edu.unlam.tpi.accounts.exceptions.NotFoundException;
-import ar.edu.unlam.tpi.accounts.persistence.impl.ApplicantCompanyDAOImpl;
-import ar.edu.unlam.tpi.accounts.persistence.impl.SupplierCompanyDAOImpl;
-import ar.edu.unlam.tpi.accounts.persistence.impl.WorkerDAOImpl;
+import ar.edu.unlam.tpi.accounts.persistence.dao.impl.ApplicantCompanyDAOImpl;
+import ar.edu.unlam.tpi.accounts.persistence.dao.impl.SupplierCompanyDAOImpl;
+import ar.edu.unlam.tpi.accounts.persistence.dao.impl.WorkerDAOImpl;
 import ar.edu.unlam.tpi.accounts.persistence.repository.CommentaryRepository;
-import ar.edu.unlam.tpi.accounts.service.impl.AccountServiceImpl;
 import ar.edu.unlam.tpi.accounts.utils.SupplierCompanyHelper;
 import ar.edu.unlam.tpi.accounts.utils.SupplierCompanyHelperTest;
 import ar.edu.unlam.tpi.accounts.utils.WorkerDataHelperTest;
@@ -26,7 +25,7 @@ import ar.edu.unlam.tpi.accounts.utils.WorkerDataHelperTest;
 import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
-public class AccountServiceTest {
+public class AccountServiceImplTest {
     
     @Mock
     private SupplierCompanyDAOImpl supplierCompanyDAO;
@@ -93,10 +92,10 @@ public class AccountServiceTest {
 
         // Mock the behavior of the workerDAO to return a list of WorkerEntity
         when(workerDAO.findByCompanyId(1L)).thenReturn(WorkerDataHelperTest.getWorkers());
-        
+
         // Act
         List<WorkerResponseDto> result = accountServiceImpl.getWorkersBySupplierCompanyId(1L);
-        
+
         // Assert
         assertNotNull(result);
         assertEquals(2, result.size());

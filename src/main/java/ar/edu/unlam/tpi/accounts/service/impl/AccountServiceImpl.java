@@ -12,9 +12,9 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import ar.edu.unlam.tpi.accounts.persistence.ApplicantCompanyDAO;
-import ar.edu.unlam.tpi.accounts.persistence.SupplierCompanyDAO;
-import ar.edu.unlam.tpi.accounts.persistence.WorkerDAO;
+import ar.edu.unlam.tpi.accounts.persistence.dao.ApplicantCompanyDAO;
+import ar.edu.unlam.tpi.accounts.persistence.dao.SupplierCompanyDAO;
+import ar.edu.unlam.tpi.accounts.persistence.dao.WorkerDAO;
 import ar.edu.unlam.tpi.accounts.persistence.repository.CommentaryRepository;
 
 import ar.edu.unlam.tpi.accounts.dto.request.MetricRequestDto;

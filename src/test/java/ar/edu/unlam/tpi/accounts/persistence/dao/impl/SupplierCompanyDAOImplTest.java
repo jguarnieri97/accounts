@@ -1,4 +1,4 @@
-package ar.edu.unlam.tpi.accounts.dao;
+package ar.edu.unlam.tpi.accounts.persistence.dao.impl;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -9,7 +9,6 @@ import java.util.Optional;
 import ar.edu.unlam.tpi.accounts.exceptions.InternalException;
 import ar.edu.unlam.tpi.accounts.exceptions.NotFoundException;
 import ar.edu.unlam.tpi.accounts.models.SupplierCompanyEntity;
-import ar.edu.unlam.tpi.accounts.persistence.impl.SupplierCompanyDAOImpl;
 import ar.edu.unlam.tpi.accounts.persistence.repository.SupplierCompanyRepository;
 import ar.edu.unlam.tpi.accounts.utils.SupplierCompanyHelperTest;
 
@@ -20,7 +19,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-public class SupplierCompanyDAOTest {
+public class SupplierCompanyDAOImplTest {
 
     @Mock
     private SupplierCompanyRepository repository;

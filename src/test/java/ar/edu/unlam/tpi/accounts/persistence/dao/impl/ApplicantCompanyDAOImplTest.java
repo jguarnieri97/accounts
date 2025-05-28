@@ -1,10 +1,11 @@
-package ar.edu.unlam.tpi.accounts.dao;
+package ar.edu.unlam.tpi.accounts.persistence.dao.impl;
 
 import static org.mockito.Mockito.when;
 
 import java.util.List;
 import java.util.Optional;
 
+import ar.edu.unlam.tpi.accounts.utils.ApplicantCompanyHelperTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,13 +16,12 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import ar.edu.unlam.tpi.accounts.exceptions.InternalException;
 import ar.edu.unlam.tpi.accounts.exceptions.NotFoundException;
 import ar.edu.unlam.tpi.accounts.models.ApplicantCompanyEntity;
-import ar.edu.unlam.tpi.accounts.persistence.impl.ApplicantCompanyDAOImpl;
+import ar.edu.unlam.tpi.accounts.persistence.dao.impl.ApplicantCompanyDAOImpl;
 import ar.edu.unlam.tpi.accounts.persistence.repository.ApplicantCompanyRepository;
-import ar.edu.unlam.tpi.accounts.utils.ApplicantCompanyHelperTest;
 import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
-public class ApplicantCompanyDAOTest {
+public class ApplicantCompanyDAOImplTest {
     
     @Mock
     private ApplicantCompanyRepository repository;
@@ -49,9 +49,9 @@ public class ApplicantCompanyDAOTest {
         // Arrange
         Long id = 1L;
         ApplicantCompanyEntity expected = ApplicantCompanyHelperTest.getApplicantCompanyList().get(0);
-        
+
         when(repository.findById(id)).thenReturn(Optional.of(ApplicantCompanyHelperTest.getApplicantCompanyList().get(0)));
-        ApplicantCompanyEntity result = applicantCompanyDAO.findById(id);        
+        ApplicantCompanyEntity result = applicantCompanyDAO.findById(id);
 
         assertNotNull(result);
         assertEquals(expected.getId(), result.getId());

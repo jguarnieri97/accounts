@@ -26,4 +26,5 @@ public class UserControllerImpl implements UserController {
                 .data(response)
                 .build();
     }
+
 }

@@ -2,14 +2,14 @@ package ar.edu.unlam.tpi.accounts.service.strategy.impl;
 
 import ar.edu.unlam.tpi.accounts.dto.request.UserDetailRequest;
 import ar.edu.unlam.tpi.accounts.models.UserEntity;
-import ar.edu.unlam.tpi.accounts.persistence.ApplicantCompanyDAO;
+import ar.edu.unlam.tpi.accounts.persistence.dao.ApplicantCompanyDAO;
 import ar.edu.unlam.tpi.accounts.service.strategy.UserDetailStrategy;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class ApplicantUserDetailStrategy implements UserDetailStrategy {
+public class ApplicantUserDetailStrategyImpl implements UserDetailStrategy {
 
     private final ApplicantCompanyDAO applicantRepository;
 
