@@ -1,6 +1,6 @@
 package ar.edu.unlam.tpi.accounts.beans;
 
-import ar.edu.unlam.tpi.accounts.commons.enums.CompanyTypeEnum;
+import ar.edu.unlam.tpi.accounts.models.CompanyTypeEnum;
 import ar.edu.unlam.tpi.accounts.models.*;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;

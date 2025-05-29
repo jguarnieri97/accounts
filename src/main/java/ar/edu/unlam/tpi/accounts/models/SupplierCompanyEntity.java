@@ -3,7 +3,6 @@ package ar.edu.unlam.tpi.accounts.models;
 import java.util.Set;
 import java.util.HashSet;
 
-import ar.edu.unlam.tpi.accounts.commons.enums.CompanyTypeEnum;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 import lombok.NoArgsConstructor;
