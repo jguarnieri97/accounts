@@ -16,7 +16,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import ar.edu.unlam.tpi.accounts.exceptions.InternalException;
 import ar.edu.unlam.tpi.accounts.exceptions.NotFoundException;
 import ar.edu.unlam.tpi.accounts.models.ApplicantCompanyEntity;
-import ar.edu.unlam.tpi.accounts.persistence.dao.impl.ApplicantCompanyDAOImpl;
 import ar.edu.unlam.tpi.accounts.persistence.repository.ApplicantCompanyRepository;
 import static org.junit.jupiter.api.Assertions.*;
 
