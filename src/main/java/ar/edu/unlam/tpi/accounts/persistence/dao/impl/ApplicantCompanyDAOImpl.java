@@ -1,7 +1,7 @@
-package ar.edu.unlam.tpi.accounts.persistence.impl;
+package ar.edu.unlam.tpi.accounts.persistence.dao.impl;
 
 import java.util.List;
-import ar.edu.unlam.tpi.accounts.persistence.ApplicantCompanyDAO;
+import ar.edu.unlam.tpi.accounts.persistence.dao.ApplicantCompanyDAO;
 import ar.edu.unlam.tpi.accounts.persistence.repository.ApplicantCompanyRepository;
 import ar.edu.unlam.tpi.accounts.models.ApplicantCompanyEntity;
 import ar.edu.unlam.tpi.accounts.exceptions.InternalException;

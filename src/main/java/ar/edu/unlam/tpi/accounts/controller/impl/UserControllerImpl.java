@@ -6,11 +6,13 @@ import ar.edu.unlam.tpi.accounts.dto.response.GenericResponse;
 import ar.edu.unlam.tpi.accounts.dto.response.UserDetailResponse;
 import ar.edu.unlam.tpi.accounts.service.UserService;
 import ar.edu.unlam.tpi.accounts.utils.Constants;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
+@Tag(name = "User Controller", description = "Operaciones relacionadas con usuarios")
 public class UserControllerImpl implements UserController {
 
     private final UserService userService;
@@ -24,4 +26,5 @@ public class UserControllerImpl implements UserController {
                 .data(response)
                 .build();
     }
+
 }

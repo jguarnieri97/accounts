@@ -1,8 +1,8 @@
-package ar.edu.unlam.tpi.accounts.persistence.impl;
+package ar.edu.unlam.tpi.accounts.persistence.dao.impl;
 
 import java.util.List;
 
-import ar.edu.unlam.tpi.accounts.persistence.WorkerDAO;
+import ar.edu.unlam.tpi.accounts.persistence.dao.WorkerDAO;
 import ar.edu.unlam.tpi.accounts.exceptions.InternalException;
 import ar.edu.unlam.tpi.accounts.exceptions.NotFoundException;
 import ar.edu.unlam.tpi.accounts.models.WorkerEntity;
