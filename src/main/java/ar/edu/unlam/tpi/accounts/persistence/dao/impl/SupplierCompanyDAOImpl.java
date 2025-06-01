@@ -1,8 +1,8 @@
-package ar.edu.unlam.tpi.accounts.persistence.impl;
+package ar.edu.unlam.tpi.accounts.persistence.dao.impl;
 
 import java.util.List;
 
-import ar.edu.unlam.tpi.accounts.persistence.SupplierCompanyDAO;
+import ar.edu.unlam.tpi.accounts.persistence.dao.SupplierCompanyDAO;
 import ar.edu.unlam.tpi.accounts.persistence.repository.SupplierCompanyRepository;
 import lombok.extern.slf4j.Slf4j;
 

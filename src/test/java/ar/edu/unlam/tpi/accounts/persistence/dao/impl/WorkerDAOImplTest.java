@@ -1,4 +1,4 @@
-package ar.edu.unlam.tpi.accounts.dao;
+package ar.edu.unlam.tpi.accounts.persistence.dao.impl;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -9,7 +9,6 @@ import java.util.Optional;
 import ar.edu.unlam.tpi.accounts.exceptions.InternalException;
 import ar.edu.unlam.tpi.accounts.exceptions.NotFoundException;
 import ar.edu.unlam.tpi.accounts.models.WorkerEntity;
-import ar.edu.unlam.tpi.accounts.persistence.impl.WorkerDAOImpl;
 import ar.edu.unlam.tpi.accounts.persistence.repository.WorkerRepository;
 import ar.edu.unlam.tpi.accounts.utils.WorkerDataHelperTest;
 
@@ -20,7 +19,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-public class WorkerDAOTest {
+public class WorkerDAOImplTest {
 
     @Mock
     private WorkerRepository repository;

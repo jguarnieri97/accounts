@@ -1,5 +1,6 @@
 package ar.edu.unlam.tpi.accounts.beans;
 
+import ar.edu.unlam.tpi.accounts.models.CompanyTypeEnum;
 import ar.edu.unlam.tpi.accounts.models.*;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
@@ -49,13 +50,13 @@ public class DataInitializer implements CommandLineRunner {
         //Inicializar entidades de proveedores  
         List<SupplierCompanyEntity> suppliers = SupplierCompanyHelper.getSupplierCompanies();
         
-        suppliers.get(0).setCompanyType(CompanyTypeEntity.ELECTRICIDAD);
+        suppliers.get(0).setCompanyType(CompanyTypeEnum.ELECTRICIDAD);
         suppliers.get(0).setGeolocation(geolocationRepository.findById(1L).get());
         
-        suppliers.get(1).setCompanyType(CompanyTypeEntity.ELECTRICIDAD);
+        suppliers.get(1).setCompanyType(CompanyTypeEnum.ELECTRICIDAD);
         suppliers.get(1).setGeolocation(geolocationRepository.findById(2L).get());
         
-        suppliers.get(2).setCompanyType(CompanyTypeEntity.ELECTRICIDAD);
+        suppliers.get(2).setCompanyType(CompanyTypeEnum.ELECTRICIDAD);
         suppliers.get(2).setGeolocation(geolocationRepository.findById(3L).get());    
 
         supplierCompanyRepository.saveAll(suppliers);

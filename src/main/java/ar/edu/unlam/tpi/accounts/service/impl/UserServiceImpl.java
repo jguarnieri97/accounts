@@ -2,58 +2,78 @@ package ar.edu.unlam.tpi.accounts.service.impl;
 
 import ar.edu.unlam.tpi.accounts.dto.request.UserDetailRequest;
 import ar.edu.unlam.tpi.accounts.dto.response.UserDetailResponse;
+import ar.edu.unlam.tpi.accounts.exceptions.NotFoundException;
 import ar.edu.unlam.tpi.accounts.exceptions.UserServiceBadRequestException;
 import ar.edu.unlam.tpi.accounts.models.UserEntity;
-import ar.edu.unlam.tpi.accounts.persistence.ApplicantCompanyDAO;
-import ar.edu.unlam.tpi.accounts.persistence.SupplierCompanyDAO;
-import ar.edu.unlam.tpi.accounts.persistence.WorkerDAO;
 import ar.edu.unlam.tpi.accounts.service.UserService;
+import ar.edu.unlam.tpi.accounts.service.strategy.UserDetailStrategy;
+import ar.edu.unlam.tpi.accounts.utils.UserDetailResponseBuilder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-
+import java.util.List;
+import java.util.ArrayList;
+import ar.edu.unlam.tpi.accounts.dto.request.UserRequest;
+import ar.edu.unlam.tpi.accounts.dto.response.UserResponse;
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
-    private final ApplicantCompanyDAO applicantRepository;
-    private final SupplierCompanyDAO supplierRepository;
-    private final WorkerDAO workerRepository;
+    private final List<UserDetailStrategy> strategies;
+    private final UserDetailResponseBuilder responseBuilder;
 
     @Override
-    public UserDetailResponse getUserDetail(UserDetailRequest userDetailRequest) {
-
-        return switch (userDetailRequest.getType()) {
-            case "applicant" -> {
-                var user = applicantRepository.findById(userDetailRequest.getUserId());
-                yield buildUserDetailResponse(user);
+    public UserResponse getUsersDetail(List<UserRequest> userRequests) {
+        List<UserDetailResponse> applicants = new ArrayList<>();
+        List<UserDetailResponse> suppliers = new ArrayList<>();
+        List<UserDetailResponse> workers = new ArrayList<>();
+    
+        for (UserRequest request : userRequests) {
+            try {
+                UserDetailStrategy strategy = strategies.stream()
+                        .filter(s -> s.supports(request.getType()))
+                        .findFirst()
+                        .orElseThrow(() -> {
+                            log.warn("Tipo de usuario no válido: {}", request.getType());
+                            return new IllegalArgumentException("Tipo de usuario no válido");
+                        });
+    
+                UserEntity user = strategy.getUser(
+                        UserDetailRequest.builder()
+                                .userId(request.getUserId())
+                                .type(request.getType())
+                                .build()
+                );
+    
+                if (user != null) {
+                    UserDetailResponse detail = responseBuilder.build(user);
+                    switch (request.getType().toLowerCase()) {
+                        case "applicant" -> applicants.add(detail);
+                        case "supplier" -> suppliers.add(detail);
+                        case "worker" -> workers.add(detail);
+                    }
+                } else {
+                    log.warn("Usuario no encontrado: id={} tipo={}", request.getUserId(), request.getType());
+                }
+    
+            } catch (Exception e) {
+                log.warn("Error al procesar usuario id={} tipo={}: {}", request.getUserId(), request.getType(), e.getMessage());
             }
-            case "supplier" -> {
-                var user = supplierRepository.findById(userDetailRequest.getUserId());
-                yield buildUserDetailResponse(user);
-            }
-            case "worker" -> {
-                var user = workerRepository.findById(userDetailRequest.getUserId());
-                yield buildUserDetailResponse(user);
-            }
-            default -> {
-                log.error("Tipo de usuario no válido: {}", userDetailRequest.getType());
-                throw new UserServiceBadRequestException("Tipo de usuario no válido");
-            }
-        };
-
-    }
-
-    private UserDetailResponse buildUserDetailResponse(UserEntity user) {
-        return UserDetailResponse.builder()
-                .id(user.getId())
-                .name(user.getName())
-                .email(user.getEmail())
-                .phone(user.getPhone())
-                .address(user.getAddress())
-                .cuit(user.getCuit())
+        }
+    
+        if (applicants.isEmpty() && suppliers.isEmpty() && workers.isEmpty()) {
+            throw new NotFoundException("No se encontraron usuarios para los datos enviados");
+        }
+    
+        return UserResponse.builder()
+                .applicants(applicants)
+                .suppliers(suppliers)
+                .workers(workers)
                 .build();
     }
+    
+    
+
 
 }
