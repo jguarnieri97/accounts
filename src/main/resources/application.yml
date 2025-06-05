@@ -23,3 +23,7 @@ logging:
     ar.edu.unlam.tpi.accounts: DEBUG
   pattern:
     console: "%d{yyyy-MM-dd HH:mm:ss} - %logger{36} - %msg%n"
+
+supplier:
+  search:
+    radius: 15

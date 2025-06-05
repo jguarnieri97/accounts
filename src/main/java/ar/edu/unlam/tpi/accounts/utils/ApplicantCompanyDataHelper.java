@@ -17,7 +17,7 @@ public class ApplicantCompanyDataHelper {
                 .email("employee@lobibyte.com")
                 .phone("+54 11 1234-5678")
                 .description("Logibyte is a leading technology company.")
-                .address("Av. Alberdi 35199, Buenos Aires")
+                    .address("350 5th Ave, New York, NY 10118, USA")
                 .build(),
             ApplicantCompanyEntity.builder()
                 .name("Tech Innovators")
@@ -27,8 +27,18 @@ public class ApplicantCompanyDataHelper {
                 .email("teh@gmail.com")
                 .phone("12131231")
                 .description("Tech Innovators is a startup focused on AI solutions.")
-                .address("456 Innovation Ave, Silicon Valley")
-                .build()
+                    .address("111 S Grand Ave, Los Angeles, CA 90012, USA")
+                .build(),
+                ApplicantCompanyEntity.builder()
+                        .name("Tech London")
+                        .isVerified(true)
+                        .isActive(true)
+                        .cuit("20-12312312-9")
+                        .email("tehLondon@gmail.com")
+                        .phone("12131231")
+                        .description("Tech Innovators is a startup focused on AI solutions.")
+                        .address("10 Downing St, London SW1A 2AA, UK")
+                        .build()
         );
     }
 }

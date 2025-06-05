@@ -40,24 +40,47 @@ public class DataInitializer implements CommandLineRunner {
 
         //Inicializar datos de compañias solicitantes
         List<ApplicantCompanyEntity> applicants = ApplicantCompanyDataHelper.getApplicantCompanyList();
-        applicants.get(0).setGeolocation(geolocationRepository.findById(4L).get());
+        applicants.get(0).setGeolocation(geolocationRepository.findById(1L).get()); // Nueva York
 
-        applicants.get(1).setGeolocation(geolocationRepository.findById(5L).get());
+        applicants.get(1).setGeolocation(geolocationRepository.findById(5L).get()); // Los Angeles
+
+        applicants.get(2).setGeolocation(geolocationRepository.findById(9L).get()); // Londres
 
         applicantCompanyRepository.saveAll(applicants);
 
 
         //Inicializar entidades de proveedores  
         List<SupplierCompanyEntity> suppliers = SupplierCompanyHelper.getSupplierCompanies();
-        
+
+        // Nueva York
         suppliers.get(0).setCompanyType(CompanyTypeEnum.ELECTRICIDAD);
-        suppliers.get(0).setGeolocation(geolocationRepository.findById(1L).get());
+        suppliers.get(0).setGeolocation(geolocationRepository.findById(2L).get());
         
         suppliers.get(1).setCompanyType(CompanyTypeEnum.ELECTRICIDAD);
-        suppliers.get(1).setGeolocation(geolocationRepository.findById(2L).get());
+        suppliers.get(1).setGeolocation(geolocationRepository.findById(3L).get());
         
+        suppliers.get(6).setCompanyType(CompanyTypeEnum.LIMPIEZA);
+        suppliers.get(6).setGeolocation(geolocationRepository.findById(4L).get());
+
+        // Los Angeles
+        suppliers.get(3).setCompanyType(CompanyTypeEnum.CONTRATISTA);
+        suppliers.get(3).setGeolocation(geolocationRepository.findById(6L).get());
+
+        suppliers.get(4).setCompanyType(CompanyTypeEnum.CONTRATISTA);
+        suppliers.get(4).setGeolocation(geolocationRepository.findById(7L).get());
+
+        suppliers.get(5).setCompanyType(CompanyTypeEnum.CONTRATISTA);
+        suppliers.get(5).setGeolocation(geolocationRepository.findById(8L).get());
+
+        // Londres
         suppliers.get(2).setCompanyType(CompanyTypeEnum.ELECTRICIDAD);
-        suppliers.get(2).setGeolocation(geolocationRepository.findById(3L).get());    
+        suppliers.get(2).setGeolocation(geolocationRepository.findById(10L).get());
+
+        suppliers.get(7).setCompanyType(CompanyTypeEnum.LIMPIEZA);
+        suppliers.get(7).setGeolocation(geolocationRepository.findById(11L).get());
+
+        suppliers.get(8).setCompanyType(CompanyTypeEnum.LIMPIEZA);
+        suppliers.get(8).setGeolocation(geolocationRepository.findById(12L).get());
 
         supplierCompanyRepository.saveAll(suppliers);
 

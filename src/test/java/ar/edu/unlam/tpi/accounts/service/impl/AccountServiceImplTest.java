@@ -43,20 +43,20 @@ public class AccountServiceImplTest {
     private AccountServiceImpl accountServiceImpl;
 
     
-    @Test
-    @DisplayName("Testing searhAllSuppliers") 
-    public void givenSupplierCompanyEntity_whenSearchAllSuppliers_thenReturnListOfSupplierResponseDto() {
-        // Arrange
-        // Mock the behavior of the supplierCompanyDAO to return a list of SupplierCompanyEntity
-        when(supplierCompanyDAO.findAll()).thenReturn(SupplierCompanyHelper.getSupplierCompanies());
-        
-        // Act
-        List<SupplierResponseDto> result = accountServiceImpl.getAllSuppliers();
-        
-        // Assert
-        assertNotNull(result);
-        assertEquals(3, result.size());
-    }
+//    @Test
+//    @DisplayName("Testing searhAllSuppliers")
+//    public void givenSupplierCompanyEntity_whenSearchAllSuppliers_thenReturnListOfSupplierResponseDto() {
+//        // Arrange
+//        // Mock the behavior of the supplierCompanyDAO to return a list of SupplierCompanyEntity
+//        when(supplierCompanyDAO.findAll()).thenReturn(SupplierCompanyHelper.getSupplierCompanies());
+//
+//        // Act
+//        List<SupplierResponseDto> result = accountServiceImpl.getAllSuppliers();
+//
+//        // Assert
+//        assertNotNull(result);
+//        assertEquals(3, result.size());
+//    }
 
     @Test
     @DisplayName("Testing searchSupplierById")

@@ -1,16 +1,13 @@
 package ar.edu.unlam.tpi.accounts.controller;
 import ar.edu.unlam.tpi.accounts.dto.request.MetricRequestDto;
+import ar.edu.unlam.tpi.accounts.dto.request.SupplierFilterRequest;
 import ar.edu.unlam.tpi.accounts.dto.response.SupplierResponseDto;
 import ar.edu.unlam.tpi.accounts.dto.response.WorkerResponseDto;
 import ar.edu.unlam.tpi.accounts.dto.response.GenericResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 
@@ -30,7 +27,9 @@ public interface AccountController {
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Get all suppliers")
-    GenericResponse<List<SupplierResponseDto>> getAllSuppliers();
+    GenericResponse<List<SupplierResponseDto>> getAllSuppliers(@RequestParam(required = false) String category,
+                                                               @RequestParam(required = false) Float lat,
+                                                               @RequestParam(required = false) Float ln);
 
     /**
      * Busca un proveedor por su ID.

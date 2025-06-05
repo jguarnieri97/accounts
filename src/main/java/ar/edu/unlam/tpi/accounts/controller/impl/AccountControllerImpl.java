@@ -1,5 +1,6 @@
 package ar.edu.unlam.tpi.accounts.controller.impl;
 
+import ar.edu.unlam.tpi.accounts.dto.request.SupplierFilterRequest;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -22,16 +23,15 @@ import lombok.extern.slf4j.Slf4j;
 public class AccountControllerImpl implements AccountController {
 
     private final AccountService accountService;
-    
+
     @Override
-    public GenericResponse<List<SupplierResponseDto>> getAllSuppliers() {
+    public GenericResponse<List<SupplierResponseDto>> getAllSuppliers(String category, Float lat, Float ln) {
         return GenericResponse.<List<SupplierResponseDto>>builder()
-            .code(Constants.STATUS_OK)
-            .data(accountService.getAllSuppliers())
-            .message(Constants.SUCCESS_MESSAGE)
-            .build();
+                .code(Constants.STATUS_OK)
+                .data(accountService.getAllSuppliers(category, lat, ln))
+                .message(Constants.SUCCESS_MESSAGE)
+                .build();
     }
-    
 
     @Override
     public GenericResponse<SupplierResponseDto> getSupplierById(Long id) {
