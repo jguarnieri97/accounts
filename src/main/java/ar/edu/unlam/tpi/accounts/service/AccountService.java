@@ -3,7 +3,6 @@ package ar.edu.unlam.tpi.accounts.service;
 import java.util.List;
 
 import ar.edu.unlam.tpi.accounts.dto.request.MetricRequestDto;
-import ar.edu.unlam.tpi.accounts.dto.request.SupplierFilterRequest;
 import ar.edu.unlam.tpi.accounts.dto.response.SupplierResponseDto;
 import ar.edu.unlam.tpi.accounts.dto.response.WorkerResponseDto;
 

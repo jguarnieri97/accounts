@@ -26,4 +26,4 @@ logging:
 
 supplier:
   search:
-    radius: 15
+    radius: 10

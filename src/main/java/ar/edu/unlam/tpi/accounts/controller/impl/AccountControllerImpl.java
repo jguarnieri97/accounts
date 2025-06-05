@@ -1,6 +1,5 @@
 package ar.edu.unlam.tpi.accounts.controller.impl;
 
-import ar.edu.unlam.tpi.accounts.dto.request.SupplierFilterRequest;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.RestController;
 

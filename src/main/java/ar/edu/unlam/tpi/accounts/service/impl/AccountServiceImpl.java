@@ -1,6 +1,5 @@
 package ar.edu.unlam.tpi.accounts.service.impl;
 
-import ar.edu.unlam.tpi.accounts.dto.request.SupplierFilterRequest;
 import ar.edu.unlam.tpi.accounts.service.AccountService;
 import ar.edu.unlam.tpi.accounts.utils.Converter;
 import ar.edu.unlam.tpi.accounts.utils.MetricsCalculator;

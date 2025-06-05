@@ -1,6 +1,5 @@
 package ar.edu.unlam.tpi.accounts.controller;
 import ar.edu.unlam.tpi.accounts.dto.request.MetricRequestDto;
-import ar.edu.unlam.tpi.accounts.dto.request.SupplierFilterRequest;
 import ar.edu.unlam.tpi.accounts.dto.response.SupplierResponseDto;
 import ar.edu.unlam.tpi.accounts.dto.response.WorkerResponseDto;
 import ar.edu.unlam.tpi.accounts.dto.response.GenericResponse;

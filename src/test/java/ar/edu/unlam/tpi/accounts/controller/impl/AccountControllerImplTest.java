@@ -1,81 +1,99 @@
 package ar.edu.unlam.tpi.accounts.controller.impl;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import ar.edu.unlam.tpi.accounts.dto.request.MetricRequestDto;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
+import ar.edu.unlam.tpi.accounts.dto.response.GenericResponse;
+import ar.edu.unlam.tpi.accounts.dto.response.SupplierResponseDto;
+import ar.edu.unlam.tpi.accounts.dto.response.WorkerResponseDto;
+import ar.edu.unlam.tpi.accounts.service.AccountService;
+import ar.edu.unlam.tpi.accounts.utils.Constants;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-@SpringBootTest
-@AutoConfigureMockMvc
+import java.util.List;
+
+@ExtendWith(MockitoExtension.class)
 public class AccountControllerImplTest {
 
-    @Autowired
-    private MockMvc mockMvc;
+    @Mock
+    private AccountService accountService;
 
-    @Autowired
-    private ObjectMapper objectMapper;
+    @InjectMocks
+    private AccountControllerImpl accountController;
 
     @Test
-    void givenNoParameters_whenGetAllSuppliers_thenReturnSupplierList() throws Exception {
-        // Given: No se requieren parámetros adicionales
+    void givenCategoryAndLocation_whenGetAllSuppliers_thenReturnSupplierList() {
+        // Given
+        String category = "agro";
+        Float lat = -34.6340f;
+        Float ln = -58.4065f;
+        List<SupplierResponseDto> suppliers = List.of(new SupplierResponseDto());
+        when(accountService.getAllSuppliers(category, lat, ln)).thenReturn(suppliers);
 
-        // When: Se realiza una solicitud GET para obtener todos los proveedores
-        mockMvc.perform(get("/accounts/v1/suppliers"))
-                // Then: Se espera que la respuesta sea exitosa y contenga un array de proveedores
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.data").isArray());
+        // When
+        GenericResponse<List<SupplierResponseDto>> response = accountController.getAllSuppliers(category, lat, ln);
+
+        // Then
+        assertNotNull(response);
+        assertEquals(Constants.STATUS_OK, response.getCode());
+        assertEquals(Constants.SUCCESS_MESSAGE, response.getMessage());
+        assertEquals(suppliers, response.getData());
     }
 
     @Test
-    void givenSupplierId_whenGetSupplierById_thenReturnSupplierDetails() throws Exception {
-        // Given: Un ID de proveedor válido
+    void givenSupplierId_whenGetSupplierById_thenReturnSupplierDetails() {
+        // Given
         Long supplierId = 1L;
+        SupplierResponseDto supplier = new SupplierResponseDto();
+        when(accountService.getSupplierById(supplierId)).thenReturn(supplier);
 
-        // When: Se realiza una solicitud GET para obtener los detalles del proveedor
-        mockMvc.perform(get("/accounts/v1/suppliers/{id}", supplierId))
-                // Then: Se espera que la respuesta sea exitosa y contenga los detalles del proveedor
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.data.id").value(supplierId));
+        // When
+        GenericResponse<SupplierResponseDto> response = accountController.getSupplierById(supplierId);
+
+        // Then
+        assertNotNull(response);
+        assertEquals(Constants.STATUS_OK, response.getCode());
+        assertEquals(Constants.SUCCESS_MESSAGE, response.getMessage());
+        assertEquals(supplier, response.getData());
     }
 
     @Test
-    void givenSupplierIdAndMetrics_whenUpdateMetrics_thenReturnUpdatedMessage() throws Exception {
-        // Given: Métricas válidas para un proveedor
+    void givenSupplierIdAndMetrics_whenPutSupplierMetrics_thenReturnUpdatedMessage() {
+        // Given
+        Long supplierId = 1L;
         MetricRequestDto metrics = new MetricRequestDto();
-        metrics.setApplicantId(1L);
-        metrics.setPrice(2000);
-        metrics.setScore(4.7);
 
-        // When: Se realiza una solicitud PUT para actualizar las métricas del proveedor
-        mockMvc.perform(put("/accounts/v1/suppliers/metrics/{id}", 1L)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(metrics)))
-                // Then: Se espera que la respuesta sea exitosa y contenga un mensaje de actualización
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.message").value("UPDATED"));
+        // When
+        GenericResponse<Void> response = accountController.putSupplierMetrics(supplierId, metrics);
+
+        // Then
+        assertNotNull(response);
+        assertEquals(Constants.STATUS_OK, response.getCode());
+        assertEquals(Constants.UPDATE_MESSAGE, response.getMessage());
+        assertNull(response.getData());
+        verify(accountService).updateSupplierMetrics(supplierId, metrics);
     }
 
     @Test
-    void givenSupplierId_whenGetWorkers_thenReturnWorkersList() throws Exception {
-        // Given: Un ID de proveedor válido
+    void givenSupplierId_whenGetWorkersBySupplierCompanyId_thenReturnWorkersList() {
+        // Given
         Long supplierId = 1L;
+        List<WorkerResponseDto> workers = List.of(new WorkerResponseDto());
+        when(accountService.getWorkersBySupplierCompanyId(supplierId)).thenReturn(workers);
 
-        // When: Se realiza una solicitud GET para obtener los trabajadores del proveedor
-        mockMvc.perform(get("/accounts/v1/suppliers/{id}/workers", supplierId))
-                // Then: Se espera que la respuesta sea exitosa y contenga un array de trabajadores
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.data").isArray());
+        // When
+        GenericResponse<List<WorkerResponseDto>> response = accountController.getWorkersBySupplierCompanyId(supplierId);
+
+        // Then
+        assertNotNull(response);
+        assertEquals(Constants.STATUS_OK, response.getCode());
+        assertEquals(Constants.SUCCESS_MESSAGE, response.getMessage());
+        assertEquals(workers, response.getData());
     }
 
 }

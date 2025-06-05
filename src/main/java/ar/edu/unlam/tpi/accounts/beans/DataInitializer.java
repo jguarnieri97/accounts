@@ -40,11 +40,11 @@ public class DataInitializer implements CommandLineRunner {
 
         //Inicializar datos de compañias solicitantes
         List<ApplicantCompanyEntity> applicants = ApplicantCompanyDataHelper.getApplicantCompanyList();
-        applicants.get(0).setGeolocation(geolocationRepository.findById(1L).get()); // Nueva York
+        applicants.get(0).setGeolocation(geolocationRepository.findById(1L).get()); // San justo
 
-        applicants.get(1).setGeolocation(geolocationRepository.findById(5L).get()); // Los Angeles
+        applicants.get(1).setGeolocation(geolocationRepository.findById(5L).get()); // Palermo
 
-        applicants.get(2).setGeolocation(geolocationRepository.findById(9L).get()); // Londres
+        applicants.get(2).setGeolocation(geolocationRepository.findById(9L).get()); // Parque Patricios
 
         applicantCompanyRepository.saveAll(applicants);
 
@@ -52,7 +52,7 @@ public class DataInitializer implements CommandLineRunner {
         //Inicializar entidades de proveedores  
         List<SupplierCompanyEntity> suppliers = SupplierCompanyHelper.getSupplierCompanies();
 
-        // Nueva York
+        // San justo
         suppliers.get(0).setCompanyType(CompanyTypeEnum.ELECTRICIDAD);
         suppliers.get(0).setGeolocation(geolocationRepository.findById(2L).get());
         
@@ -62,7 +62,7 @@ public class DataInitializer implements CommandLineRunner {
         suppliers.get(6).setCompanyType(CompanyTypeEnum.LIMPIEZA);
         suppliers.get(6).setGeolocation(geolocationRepository.findById(4L).get());
 
-        // Los Angeles
+        // Palermo
         suppliers.get(3).setCompanyType(CompanyTypeEnum.CONTRATISTA);
         suppliers.get(3).setGeolocation(geolocationRepository.findById(6L).get());
 
@@ -72,7 +72,7 @@ public class DataInitializer implements CommandLineRunner {
         suppliers.get(5).setCompanyType(CompanyTypeEnum.CONTRATISTA);
         suppliers.get(5).setGeolocation(geolocationRepository.findById(8L).get());
 
-        // Londres
+        // Parque Patricios
         suppliers.get(2).setCompanyType(CompanyTypeEnum.ELECTRICIDAD);
         suppliers.get(2).setGeolocation(geolocationRepository.findById(10L).get());
 
@@ -93,7 +93,15 @@ public class DataInitializer implements CommandLineRunner {
         workers.get(3).setCompany(suppliers.get(1)); // Ana Martínez - TechSolutions
         workers.get(4).setCompany(suppliers.get(2)); // Roberto López - AgroFertil
         workers.get(5).setCompany(suppliers.get(2)); // Laura Sánchez - AgroFertil
-        
+        workers.get(6).setCompany(suppliers.get(3));
+        workers.get(7).setCompany(suppliers.get(3));
+        workers.get(8).setCompany(suppliers.get(4));
+        workers.get(9).setCompany(suppliers.get(5));
+        workers.get(10).setCompany(suppliers.get(6));
+        workers.get(12).setCompany(suppliers.get(7));
+        workers.get(13).setCompany(suppliers.get(8));
+
+
         workerRepository.saveAll(workers);
 
         log.info("Data initialized successfully");
