@@ -40,24 +40,47 @@ public class DataInitializer implements CommandLineRunner {
 
         //Inicializar datos de compañias solicitantes
         List<ApplicantCompanyEntity> applicants = ApplicantCompanyDataHelper.getApplicantCompanyList();
-        applicants.get(0).setGeolocation(geolocationRepository.findById(4L).get());
+        applicants.get(0).setGeolocation(geolocationRepository.findById(1L).get()); // San justo
 
-        applicants.get(1).setGeolocation(geolocationRepository.findById(5L).get());
+        applicants.get(1).setGeolocation(geolocationRepository.findById(5L).get()); // Palermo
+
+        applicants.get(2).setGeolocation(geolocationRepository.findById(9L).get()); // Parque Patricios
 
         applicantCompanyRepository.saveAll(applicants);
 
 
         //Inicializar entidades de proveedores  
         List<SupplierCompanyEntity> suppliers = SupplierCompanyHelper.getSupplierCompanies();
-        
+
+        // San justo
         suppliers.get(0).setCompanyType(CompanyTypeEnum.ELECTRICIDAD);
-        suppliers.get(0).setGeolocation(geolocationRepository.findById(1L).get());
+        suppliers.get(0).setGeolocation(geolocationRepository.findById(2L).get());
         
         suppliers.get(1).setCompanyType(CompanyTypeEnum.ELECTRICIDAD);
-        suppliers.get(1).setGeolocation(geolocationRepository.findById(2L).get());
+        suppliers.get(1).setGeolocation(geolocationRepository.findById(3L).get());
         
+        suppliers.get(6).setCompanyType(CompanyTypeEnum.LIMPIEZA);
+        suppliers.get(6).setGeolocation(geolocationRepository.findById(4L).get());
+
+        // Palermo
+        suppliers.get(3).setCompanyType(CompanyTypeEnum.CONTRATISTA);
+        suppliers.get(3).setGeolocation(geolocationRepository.findById(6L).get());
+
+        suppliers.get(4).setCompanyType(CompanyTypeEnum.CONTRATISTA);
+        suppliers.get(4).setGeolocation(geolocationRepository.findById(7L).get());
+
+        suppliers.get(5).setCompanyType(CompanyTypeEnum.CONTRATISTA);
+        suppliers.get(5).setGeolocation(geolocationRepository.findById(8L).get());
+
+        // Parque Patricios
         suppliers.get(2).setCompanyType(CompanyTypeEnum.ELECTRICIDAD);
-        suppliers.get(2).setGeolocation(geolocationRepository.findById(3L).get());    
+        suppliers.get(2).setGeolocation(geolocationRepository.findById(10L).get());
+
+        suppliers.get(7).setCompanyType(CompanyTypeEnum.LIMPIEZA);
+        suppliers.get(7).setGeolocation(geolocationRepository.findById(11L).get());
+
+        suppliers.get(8).setCompanyType(CompanyTypeEnum.LIMPIEZA);
+        suppliers.get(8).setGeolocation(geolocationRepository.findById(12L).get());
 
         supplierCompanyRepository.saveAll(suppliers);
 
@@ -70,7 +93,15 @@ public class DataInitializer implements CommandLineRunner {
         workers.get(3).setCompany(suppliers.get(1)); // Ana Martínez - TechSolutions
         workers.get(4).setCompany(suppliers.get(2)); // Roberto López - AgroFertil
         workers.get(5).setCompany(suppliers.get(2)); // Laura Sánchez - AgroFertil
-        
+        workers.get(6).setCompany(suppliers.get(3));
+        workers.get(7).setCompany(suppliers.get(3));
+        workers.get(8).setCompany(suppliers.get(4));
+        workers.get(9).setCompany(suppliers.get(5));
+        workers.get(10).setCompany(suppliers.get(6));
+        workers.get(12).setCompany(suppliers.get(7));
+        workers.get(13).setCompany(suppliers.get(8));
+
+
         workerRepository.saveAll(workers);
 
         log.info("Data initialized successfully");
