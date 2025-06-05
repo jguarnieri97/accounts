@@ -30,6 +30,21 @@ public class SupplierCompanyDAOImpl implements SupplierCompanyDAO {
             throw new InternalException(e.getMessage());
         }
     }
+
+    @Override
+    public List<SupplierCompanyEntity> findByCategoryAndLatAndLn(String category, Float lat, Float ln, Float radius) {
+        try {
+            List<SupplierCompanyEntity> result = repository.findByCategoryAndLatAndLn(category, lat, ln, radius);
+            if (result.isEmpty()) {
+                throw new NotFoundException("No se encontraron proveedores para los filtros dados");
+            }
+            return result;
+        } catch (NotFoundException e) {
+            throw new NotFoundException(e.getDetail());
+        } catch (Exception e) {
+            throw new InternalException(e.getMessage());
+        }
+    }
     
     @Override
     public SupplierCompanyEntity findById(Long id) {

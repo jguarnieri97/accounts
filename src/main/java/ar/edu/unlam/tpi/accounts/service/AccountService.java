@@ -12,11 +12,11 @@ import ar.edu.unlam.tpi.accounts.dto.response.WorkerResponseDto;
 public interface AccountService {
 
     /**
-     * Obtiene una lista de todos los proveedores disponibles.
+     * Obtiene una lista de todos los proveedores disponibles or categoria y por geolocalización.
      *
      * @return una lista de objetos {@link SupplierResponseDto}.
      */
-    List<SupplierResponseDto> getAllSuppliers();
+    List<SupplierResponseDto> getAllSuppliers(String category, Float lat, Float ln);
 
     /**
      * Obtiene los detalles de un proveedor específico por su ID.

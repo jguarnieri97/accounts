@@ -23,9 +23,6 @@ public class SupplierResponseDto {
     private String type;
     private GeolocationResponseDto geolocation;
     private Float score;
-    
-
-    private CompanyResponseTypeDto companyType;
 
     private Float avgPrice;
 

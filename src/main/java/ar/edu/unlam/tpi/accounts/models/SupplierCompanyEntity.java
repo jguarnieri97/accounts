@@ -3,14 +3,12 @@ package ar.edu.unlam.tpi.accounts.models;
 import java.util.Set;
 import java.util.HashSet;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import lombok.Setter;
 import lombok.Getter;
-import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "supplier_companies")
@@ -21,9 +19,13 @@ import jakarta.persistence.Table;
 @SuperBuilder
 public class SupplierCompanyEntity extends CompanyEntity {
     private Integer commentsCount;
+
     private Float avgPrice;
+
     private Float score;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "company_type")
     private CompanyTypeEnum companyType;
     
     @OneToMany(mappedBy = "supplierCompany", orphanRemoval = true)

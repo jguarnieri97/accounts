@@ -122,4 +122,55 @@ public class SupplierCompanyDAOImplTest {
         });
 
     }
+
+    @Test
+    void givenMatchingSuppliers_whenFindByCategoryAndLatAndLn_thenReturnsList() {
+        // Given
+        String category = "agro";
+        Float lat = -34.634f;
+        Float ln = -58.4065f;
+        Float radius = 10f;
+        List<SupplierCompanyEntity> expected = List.of(new SupplierCompanyEntity());
+        when(repository.findByCategoryAndLatAndLn(category, lat, ln, radius)).thenReturn(expected);
+
+        // When
+        List<SupplierCompanyEntity> result = supplierCompanyDAO.findByCategoryAndLatAndLn(category, lat, ln, radius);
+
+        // Then
+        assertEquals(expected, result);
+        verify(repository).findByCategoryAndLatAndLn(category, lat, ln, radius);
+    }
+
+    @Test
+    void givenNoSuppliers_whenFindByCategoryAndLatAndLn_thenThrowsNotFoundException() {
+        // Given
+        String category = "agro";
+        Float lat = -34.634f;
+        Float ln = -58.4065f;
+        Float radius = 10f;
+        when(repository.findByCategoryAndLatAndLn(category, lat, ln, radius)).thenReturn(List.of());
+
+        // When & Then
+        NotFoundException ex = assertThrows(NotFoundException.class, () ->
+                supplierCompanyDAO.findByCategoryAndLatAndLn(category, lat, ln, radius)
+        );
+        assertEquals("No se encontraron proveedores para los filtros dados", ex.getDetail());
+        verify(repository).findByCategoryAndLatAndLn(category, lat, ln, radius);
+    }
+
+    @Test
+    void givenRepositoryThrowsException_whenFindByCategoryAndLatAndLn_thenThrowsInternalException() {
+        // Given
+        String category = "agro";
+        Float lat = -34.634f;
+        Float ln = -58.4065f;
+        Float radius = 10f;
+        when(repository.findByCategoryAndLatAndLn(category, lat, ln, radius)).thenThrow(new RuntimeException("DB error"));
+
+        // When & Then
+        assertThrows(InternalException.class, () ->
+                supplierCompanyDAO.findByCategoryAndLatAndLn(category, lat, ln, radius)
+        );
+        verify(repository).findByCategoryAndLatAndLn(category, lat, ln, radius);
+    }
 }
