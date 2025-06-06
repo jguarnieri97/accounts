@@ -23,13 +23,18 @@ public abstract class UserEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @Column(name = "user_name")
     private String name;
 
     private String email;
     
     private String phone;
 
+    @Column(name = "user_address")
     private String address;
+
     private String cuit;
+
+    @Column(name = "is_active")
     private Boolean isActive;
 }

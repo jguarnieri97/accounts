@@ -11,20 +11,23 @@ import lombok.Setter;
 import lombok.Getter;
 
 @Entity
-@Table(name = "supplier_companies")
+@Table(name = "SUPPLIER_COMPANY", schema = "USERS")
 @NoArgsConstructor
 @AllArgsConstructor
 @Setter
 @Getter
 @SuperBuilder
 public class SupplierCompanyEntity extends CompanyEntity {
+
+    @Column(name = "comments_count")
     private Integer commentsCount;
 
+    @Column(name = "avg_price")
     private Float avgPrice;
 
+    @Column(name = "avg_score")
     private Float score;
 
-    @Enumerated(EnumType.STRING)
     @Column(name = "company_type")
     private CompanyTypeEnum companyType;
     

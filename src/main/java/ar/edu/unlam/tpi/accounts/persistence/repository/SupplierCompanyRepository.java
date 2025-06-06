@@ -16,12 +16,11 @@ public interface SupplierCompanyRepository extends JpaRepository<SupplierCompany
      * @return a list of all supplier companies.
      */
     @Query(
-            value = "SELECT s.* FROM supplier_companies s " +
-                    "JOIN geolocations g ON s.geolocation_id = g.id " +
+            value = "SELECT s.* FROM users.supplier_company s " +
                     "WHERE (:category IS NULL OR s.company_type = :category) AND " +
                     "(:lat IS NULL OR :ln IS NULL OR " +
-                    "(6371 * acos(cos(radians(:lat)) * cos(radians(g.lat)) * cos(radians(g.ln) - radians(:ln)) + sin(radians(:lat)) * sin(radians(g.lat)))) <= :radius) " +
-                    "ORDER BY (6371 * acos(cos(radians(:lat)) * cos(radians(g.lat)) * cos(radians(g.ln) - radians(:ln)) + sin(radians(:lat)) * sin(radians(g.lat)))) ASC",
+                    "(6371 * acos(cos(radians(:lat)) * cos(radians(s.lat)) * cos(radians(s.ln) - radians(:ln)) + sin(radians(:lat)) * sin(radians(s.lat)))) <= :radius) " +
+                    "ORDER BY (6371 * acos(cos(radians(:lat)) * cos(radians(s.lat)) * cos(radians(s.ln) - radians(:ln)) + sin(radians(:lat)) * sin(radians(s.lat)))) ASC",
             nativeQuery = true
     )
     List<SupplierCompanyEntity> findByCategoryAndLatAndLn(
