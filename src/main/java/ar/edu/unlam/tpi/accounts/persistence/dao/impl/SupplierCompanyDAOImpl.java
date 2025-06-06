@@ -32,7 +32,7 @@ public class SupplierCompanyDAOImpl implements SupplierCompanyDAO {
     }
 
     @Override
-    public List<SupplierCompanyEntity> findByCategoryAndLatAndLn(String category, Float lat, Float ln, Float radius) {
+    public List<SupplierCompanyEntity> findByCategoryAndLatAndLn(Integer category, Float lat, Float ln, Float radius) {
         try {
             List<SupplierCompanyEntity> result = repository.findByCategoryAndLatAndLn(category, lat, ln, radius);
             if (result.isEmpty()) {

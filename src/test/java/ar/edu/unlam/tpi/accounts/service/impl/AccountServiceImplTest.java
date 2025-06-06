@@ -100,7 +100,8 @@ public class AccountServiceImplTest {
     @Test
     void givenCategoryAndLocation_whenGetAllSuppliers_thenReturnSupplierResponseDtoList() {
         // Given
-        String category = "agro";
+        String category = "ELECTRICIAN";
+        Integer categoryEnum = 0;
         Float lat = -34.6340f;
         Float ln = -58.4065f;
         Float radius = 10f;
@@ -109,7 +110,7 @@ public class AccountServiceImplTest {
         // Setea el valor de searchRadius en el servicio antes de llamar al método
         ReflectionTestUtils.setField(accountServiceImpl, "searchRadius", radius);
 
-        when(supplierCompanyDAO.findByCategoryAndLatAndLn(category, lat, ln, radius)).thenReturn(suppliers);
+        when(supplierCompanyDAO.findByCategoryAndLatAndLn(categoryEnum, lat, ln, radius)).thenReturn(suppliers);
 
         // When
         List<SupplierResponseDto> result = accountServiceImpl.getAllSuppliers(category, lat, ln);
@@ -117,7 +118,7 @@ public class AccountServiceImplTest {
         // Then
         assertNotNull(result);
         assertEquals(suppliers.size(), result.size());
-        verify(supplierCompanyDAO).findByCategoryAndLatAndLn(category, lat, ln, radius);
+        verify(supplierCompanyDAO).findByCategoryAndLatAndLn(categoryEnum, lat, ln, radius);
     }
 
 }

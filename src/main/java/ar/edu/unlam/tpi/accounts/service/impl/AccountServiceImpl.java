@@ -1,5 +1,6 @@
 package ar.edu.unlam.tpi.accounts.service.impl;
 
+import ar.edu.unlam.tpi.accounts.models.CompanyTypeEnum;
 import ar.edu.unlam.tpi.accounts.service.AccountService;
 import ar.edu.unlam.tpi.accounts.utils.Converter;
 import ar.edu.unlam.tpi.accounts.utils.MetricsCalculator;
@@ -41,7 +42,8 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public List<SupplierResponseDto> getAllSuppliers(String category, Float lat, Float ln) {
-        return supplierCompanyDAO.findByCategoryAndLatAndLn(category, lat, ln, searchRadius)
+        Integer companyTypeOrdinal = category != null ? CompanyTypeEnum.valueOf(category).ordinal() : null;
+        return supplierCompanyDAO.findByCategoryAndLatAndLn(companyTypeOrdinal, lat, ln, searchRadius)
             .stream()
             .map(supplier -> Converter.convertToDto(supplier, SupplierResponseDto.class))
             .collect(Collectors.toList());
