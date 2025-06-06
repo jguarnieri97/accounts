@@ -1,9 +1,11 @@
 package ar.edu.unlam.tpi.accounts.service.impl;
 
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.List;
 
+import ar.edu.unlam.tpi.accounts.models.SupplierCompanyEntity;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,9 +20,9 @@ import ar.edu.unlam.tpi.accounts.persistence.dao.impl.ApplicantCompanyDAOImpl;
 import ar.edu.unlam.tpi.accounts.persistence.dao.impl.SupplierCompanyDAOImpl;
 import ar.edu.unlam.tpi.accounts.persistence.dao.impl.WorkerDAOImpl;
 import ar.edu.unlam.tpi.accounts.persistence.repository.CommentaryRepository;
-import ar.edu.unlam.tpi.accounts.utils.SupplierCompanyHelper;
 import ar.edu.unlam.tpi.accounts.utils.SupplierCompanyHelperTest;
 import ar.edu.unlam.tpi.accounts.utils.WorkerDataHelperTest;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -41,22 +43,6 @@ public class AccountServiceImplTest {
 
     @InjectMocks
     private AccountServiceImpl accountServiceImpl;
-
-    
-    @Test
-    @DisplayName("Testing searhAllSuppliers") 
-    public void givenSupplierCompanyEntity_whenSearchAllSuppliers_thenReturnListOfSupplierResponseDto() {
-        // Arrange
-        // Mock the behavior of the supplierCompanyDAO to return a list of SupplierCompanyEntity
-        when(supplierCompanyDAO.findAll()).thenReturn(SupplierCompanyHelper.getSupplierCompanies());
-        
-        // Act
-        List<SupplierResponseDto> result = accountServiceImpl.getAllSuppliers();
-        
-        // Assert
-        assertNotNull(result);
-        assertEquals(3, result.size());
-    }
 
     @Test
     @DisplayName("Testing searchSupplierById")
@@ -109,6 +95,29 @@ public class AccountServiceImplTest {
         // Act & Assert
         when(workerDAO.findByCompanyId(1L)).thenThrow(new NotFoundException("Workers not found for the company"));
         assertThrows(NotFoundException.class, ()->accountServiceImpl.getWorkersBySupplierCompanyId(1L));
+    }
+
+    @Test
+    void givenCategoryAndLocation_whenGetAllSuppliers_thenReturnSupplierResponseDtoList() {
+        // Given
+        String category = "agro";
+        Float lat = -34.6340f;
+        Float ln = -58.4065f;
+        Float radius = 10f;
+        List<SupplierCompanyEntity> suppliers = List.of(new SupplierCompanyEntity());
+
+        // Setea el valor de searchRadius en el servicio antes de llamar al método
+        ReflectionTestUtils.setField(accountServiceImpl, "searchRadius", radius);
+
+        when(supplierCompanyDAO.findByCategoryAndLatAndLn(category, lat, ln, radius)).thenReturn(suppliers);
+
+        // When
+        List<SupplierResponseDto> result = accountServiceImpl.getAllSuppliers(category, lat, ln);
+
+        // Then
+        assertNotNull(result);
+        assertEquals(suppliers.size(), result.size());
+        verify(supplierCompanyDAO).findByCategoryAndLatAndLn(category, lat, ln, radius);
     }
 
 }

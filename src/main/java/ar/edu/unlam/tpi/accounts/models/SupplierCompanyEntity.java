@@ -11,7 +11,6 @@ import lombok.AllArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import lombok.Setter;
 import lombok.Getter;
-import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "SUPPLIER_COMPANY", schema = "USERS")
@@ -31,6 +30,7 @@ public class SupplierCompanyEntity extends CompanyEntity {
     @Column(name = "avg_score")
     private Float score;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "company_type")
     private CompanyTypeEnum companyType;
     

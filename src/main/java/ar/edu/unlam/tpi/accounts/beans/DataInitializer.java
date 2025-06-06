@@ -31,14 +31,16 @@ public class DataInitializer implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        
-
 
         //Inicializar datos de compañias solicitantes
         List<ApplicantCompanyEntity> applicants = ApplicantCompanyDataHelper.getApplicantCompanyList();
+
         applicants.get(0).setGeolocation(new Geolocation(-0.96f, -0.96f));
 
         applicants.get(1).setGeolocation(new Geolocation(-0.96f, -0.96f));
+
+        applicants.get(2).setGeolocation(new Geolocation(-0.96f, -0.96f));
+
 
         applicantCompanyRepository.saveAll(applicants);
 
@@ -66,7 +68,15 @@ public class DataInitializer implements CommandLineRunner {
         workers.get(3).setCompany(suppliers.get(1)); // Ana Martínez - TechSolutions
         workers.get(4).setCompany(suppliers.get(2)); // Roberto López - AgroFertil
         workers.get(5).setCompany(suppliers.get(2)); // Laura Sánchez - AgroFertil
-        
+        workers.get(6).setCompany(suppliers.get(3));
+        workers.get(7).setCompany(suppliers.get(3));
+        workers.get(8).setCompany(suppliers.get(4));
+        workers.get(9).setCompany(suppliers.get(5));
+        workers.get(10).setCompany(suppliers.get(6));
+        workers.get(12).setCompany(suppliers.get(7));
+        workers.get(13).setCompany(suppliers.get(8));
+
+
         workerRepository.saveAll(workers);
 
         log.info("Data initialized successfully");
