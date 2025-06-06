@@ -6,7 +6,6 @@ import lombok.Data;
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class GeolocationResponseDto {
-    private Long id;
     private Float lat;
     private Float ln;
 } 

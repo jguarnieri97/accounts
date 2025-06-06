@@ -1,8 +1,8 @@
 package ar.edu.unlam.tpi.accounts.models;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.MappedSuperclass;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.JoinColumn;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
@@ -16,10 +16,13 @@ import lombok.AllArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public abstract class CompanyEntity extends UserEntity {
-    @OneToOne
-    @JoinColumn(name = "geolocation_id")
-    private GeolocationEntity geolocation;
 
+    @Embedded
+    private Geolocation geolocation;
+
+    @Column(name = "is_verified")
     private Boolean isVerified;
+
+    @Column(name = "company_description")
     private String description;
 }
