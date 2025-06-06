@@ -3,9 +3,7 @@ package ar.edu.unlam.tpi.accounts.models;
 import java.util.Set;
 import java.util.HashSet;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 import lombok.experimental.SuperBuilder;
@@ -30,7 +28,6 @@ public class SupplierCompanyEntity extends CompanyEntity {
     @Column(name = "avg_score")
     private Float score;
 
-    @Enumerated(EnumType.STRING)
     @Column(name = "company_type")
     private CompanyTypeEnum companyType;
     

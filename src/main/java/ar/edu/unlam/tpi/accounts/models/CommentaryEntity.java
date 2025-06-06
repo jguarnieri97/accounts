@@ -31,10 +31,10 @@ public class CommentaryEntity {
     private Double score;
 
     @ManyToOne
-    @JoinColumn(name = "supplier_company_id")
+    @JoinColumn(name = "supplier_id")
     private SupplierCompanyEntity supplierCompany;
 
     @ManyToOne
-    @JoinColumn(name = "applicant_company_id")
+    @JoinColumn(name = "applicant_id")
     private ApplicantCompanyEntity applicantCompany;
 }

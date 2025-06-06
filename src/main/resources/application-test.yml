@@ -16,5 +16,10 @@ spring:
       console:
         enabled: true
         path: /h2-console
+
 server:
   port: 8083
+
+supplier:
+  search:
+    radius: 10
