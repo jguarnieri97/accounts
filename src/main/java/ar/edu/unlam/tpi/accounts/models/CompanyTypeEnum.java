@@ -1,7 +1,5 @@
 package ar.edu.unlam.tpi.accounts.models;
 
 public enum CompanyTypeEnum {
-    ELECTRICIDAD,
-    CONTRATISTA,
-    LIMPIEZA
+    ELECTRICIAN, CONTRACTOR, CLEANING
 }
