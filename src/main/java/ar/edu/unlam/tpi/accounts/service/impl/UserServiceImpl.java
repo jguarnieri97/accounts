@@ -21,7 +21,6 @@ import ar.edu.unlam.tpi.accounts.dto.response.UserResponse;
 public class UserServiceImpl implements UserService {
 
     private final List<UserDetailStrategy> strategies;
-    private final UserDetailResponseBuilder responseBuilder;
 
     @Override
     public UserResponse getUsersDetail(List<UserRequest> userRequests) {
@@ -47,7 +46,7 @@ public class UserServiceImpl implements UserService {
                 );
     
                 if (user != null) {
-                    UserDetailResponse detail = responseBuilder.build(user);
+                    UserDetailResponse detail = UserDetailResponseBuilder.build(user);
                     switch (request.getType().toLowerCase()) {
                         case "applicant" -> applicants.add(detail);
                         case "supplier" -> suppliers.add(detail);

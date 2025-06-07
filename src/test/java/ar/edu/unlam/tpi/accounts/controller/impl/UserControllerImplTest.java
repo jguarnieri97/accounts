@@ -6,11 +6,11 @@ import ar.edu.unlam.tpi.accounts.dto.response.UserDetailResponse;
 import ar.edu.unlam.tpi.accounts.dto.response.UserResponse;
 import ar.edu.unlam.tpi.accounts.service.UserService;
 import ar.edu.unlam.tpi.accounts.utils.Constants;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -18,18 +18,14 @@ import static org.mockito.Mockito.when;
 
 import java.util.List;
 
-class UserControllerImplTest {
+@ExtendWith(MockitoExtension.class)
+public class UserControllerImplTest {
 
     @Mock
     private UserService userService;
 
     @InjectMocks
     private UserControllerImpl userController;
-
-    @BeforeEach
-    void setUp() {
-        MockitoAnnotations.openMocks(this);
-    }
 
     @Test
     void givenUserRequestList_whenGetUsersDetails_thenReturnGroupedUserResponse() {

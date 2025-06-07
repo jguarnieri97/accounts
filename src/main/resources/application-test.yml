@@ -4,7 +4,7 @@ spring:
   application:
     name: Accounts
   datasource:
-    url: jdbc:h2:mem:testdb;DB_CLOSE_ON_EXIT=FALSE
+    url: jdbc:h2:mem:testdb;DB_CLOSE_ON_EXIT=FALSE;INIT=CREATE SCHEMA IF NOT EXISTS USERS\;CREATE SCHEMA IF NOT EXISTS CONTRACTS\;CREATE SCHEMA IF NOT EXISTS RECOM
     username: sa
     password:
     driver-class-name: org.h2.Driver
@@ -22,4 +22,4 @@ server:
 
 supplier:
   search:
-    radius: 10
+    radius: ${SEARCH_RADIUS:50}

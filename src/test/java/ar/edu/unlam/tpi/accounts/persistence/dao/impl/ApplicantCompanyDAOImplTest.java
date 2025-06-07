@@ -1,12 +1,10 @@
 package ar.edu.unlam.tpi.accounts.persistence.dao.impl;
 
-import static org.mockito.Mockito.when;
-
 import java.util.List;
 import java.util.Optional;
 
 import ar.edu.unlam.tpi.accounts.utils.ApplicantCompanyHelperTest;
-import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -18,6 +16,7 @@ import ar.edu.unlam.tpi.accounts.exceptions.NotFoundException;
 import ar.edu.unlam.tpi.accounts.models.ApplicantCompanyEntity;
 import ar.edu.unlam.tpi.accounts.persistence.repository.ApplicantCompanyRepository;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class ApplicantCompanyDAOImplTest {
@@ -29,8 +28,7 @@ public class ApplicantCompanyDAOImplTest {
     private ApplicantCompanyDAOImpl applicantCompanyDAO;
 
     @Test
-    @DisplayName("Test findAll method")
-    public void given_whenFindAll_ThenReturnListOfApplicants() {
+    void given_whenFindAll_ThenReturnListOfApplicants() {
         // Arrange
         List<ApplicantCompanyEntity> expected = ApplicantCompanyHelperTest.getApplicantCompanyList();
         
@@ -43,8 +41,20 @@ public class ApplicantCompanyDAOImplTest {
     }
 
     @Test
-    @DisplayName("Test findById method")
-    public void givenAnId_whenFindById_ThenReturnApplicant() {
+    void givenRepositoryThrowsException_whenFindAll_thenThrowsInternalException() {
+        // Given
+        when(repository.findAll()).thenThrow(new InternalException("Database down"));
+
+        // When & Then
+        InternalException thrown = Assertions.assertThrows(
+                InternalException.class,
+                () -> applicantCompanyDAO.findAll()
+        );
+        Assertions.assertEquals("INTERNAL_SERVER_ERROR", thrown.getMessage());
+    }
+
+    @Test
+    void givenAnId_whenFindById_ThenReturnApplicant() {
         // Arrange
         Long id = 1L;
         ApplicantCompanyEntity expected = ApplicantCompanyHelperTest.getApplicantCompanyList().get(0);
@@ -58,8 +68,7 @@ public class ApplicantCompanyDAOImplTest {
 
 
     @Test
-    @DisplayName("Test findById method")
-    public void givenAnId_whenFindById_thenReturnException() {
+    void givenAnId_whenFindById_thenReturnException() {
         // Arrange
         Long id = 1L;
        
@@ -96,4 +105,31 @@ public class ApplicantCompanyDAOImplTest {
     }
 
 
+    @Test
+    void givenValidId_whenDelete_thenRepositoryDeleteByIdIsCalled() {
+        // Given
+        Long id = 1L;
+
+        // When
+        applicantCompanyDAO.delete(id);
+
+        // Then
+        verify(repository, times(1)).deleteById(id);
+    }
+
+    @Test
+    void givenRepositoryThrowsException_whenDelete_thenThrowsInternalException() {
+        // Given
+        Long id = 99L;
+        doThrow(new InternalException("Database error"))
+                .when(repository).deleteById(id);
+
+        // When & Then
+        InternalException thrown = Assertions.assertThrows(
+                InternalException.class,
+                () -> applicantCompanyDAO.delete(id)
+        );
+
+        assertEquals("INTERNAL_SERVER_ERROR", thrown.getMessage());
+    }
 }
