@@ -17,7 +17,7 @@ public interface SupplierCompanyRepository extends JpaRepository<SupplierCompany
      */
     @Query(
             value = "SELECT s.* FROM USERS.SUPPLIER_COMPANY s " +
-                    "WHERE (:category IS NULL OR s.company_description = :category) AND " +
+                    "WHERE (:category IS NULL OR s.company_type = :category) AND " +
                     "(:lat IS NULL OR :ln IS NULL OR " +
                     "(6371 * acos(cos(radians(:lat)) * cos(radians(s.lat)) * cos(radians(s.ln) - radians(:ln)) + sin(radians(:lat)) * sin(radians(s.lat)))) <= :radius) " +
                     "ORDER BY (6371 * acos(cos(radians(:lat)) * cos(radians(s.lat)) * cos(radians(s.ln) - radians(:ln)) + sin(radians(:lat)) * sin(radians(s.lat)))) ASC",
