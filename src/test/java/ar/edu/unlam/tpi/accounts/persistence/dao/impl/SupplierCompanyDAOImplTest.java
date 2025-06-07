@@ -126,7 +126,7 @@ public class SupplierCompanyDAOImplTest {
     @Test
     void givenMatchingSuppliers_whenFindByCategoryAndLatAndLn_thenReturnsList() {
         // Given
-        String category = "agro";
+        Integer category = 1;
         Float lat = -34.634f;
         Float ln = -58.4065f;
         Float radius = 10f;
@@ -144,7 +144,7 @@ public class SupplierCompanyDAOImplTest {
     @Test
     void givenNoSuppliers_whenFindByCategoryAndLatAndLn_thenThrowsNotFoundException() {
         // Given
-        String category = "agro";
+        Integer category = 1;
         Float lat = -34.634f;
         Float ln = -58.4065f;
         Float radius = 10f;
@@ -161,7 +161,7 @@ public class SupplierCompanyDAOImplTest {
     @Test
     void givenRepositoryThrowsException_whenFindByCategoryAndLatAndLn_thenThrowsInternalException() {
         // Given
-        String category = "agro";
+        Integer category = 1;
         Float lat = -34.634f;
         Float ln = -58.4065f;
         Float radius = 10f;
