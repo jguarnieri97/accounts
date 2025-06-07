@@ -6,7 +6,6 @@ import static org.mockito.Mockito.when;
 import java.util.List;
 
 import ar.edu.unlam.tpi.accounts.models.SupplierCompanyEntity;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -45,8 +44,7 @@ public class AccountServiceImplTest {
     private AccountServiceImpl accountServiceImpl;
 
     @Test
-    @DisplayName("Testing searchSupplierById")
-    public void givenSupplierCompanyEntity_whenSearchSupplierById_thenReturnSupplierResponseDto() {
+    void givenSupplierCompanyEntity_whenSearchSupplierById_thenReturnSupplierResponseDto() {
         // Arrange
         SupplierResponseDto expDto  = SupplierCompanyHelperTest.getSupplierDto();
         // Mock the behavior of the supplierCompanyDAO to return a specific SupplierCompanyEntity
@@ -61,8 +59,7 @@ public class AccountServiceImplTest {
     
     
     @Test
-    @DisplayName("Testing searchSupplierById then it need to throw an exception")
-    public void givenSupplierCompanyEntity_whenSearchSupplierById_thenThrowsException() {
+    void givenSupplierCompanyEntity_whenSearchSupplierById_thenThrowsException() {
         // Act        
         when(supplierCompanyDAO.findById(1L)).thenThrow(new NotFoundException("Supplier not found"));
         // Assert
@@ -71,8 +68,7 @@ public class AccountServiceImplTest {
     }
 
     @Test
-    @DisplayName("Testing searchWorkersBySupplierCompanyId")
-    public void givenSupplierCompanyIdWhensearchWorkersBySupplierCompanyId_thenReturnListOfWorkerResponseDto() {
+    void givenSupplierCompanyId_whenSearchWorkersBySupplierCompanyId_thenReturnListOfWorkerResponseDto() {
         // Arrange
         List<WorkerResponseDto> expDto = WorkerDataHelperTest.getWorkersDto();
 
@@ -90,8 +86,7 @@ public class AccountServiceImplTest {
     }
 
     @Test
-    @DisplayName("Testing searchWorkersBySupplierCompanyId but it need to throw an exception")
-    public void givenSupplierCompanyIdWhensearchWorkersBySupplierCompanyId_thenThrowsException() {
+    void givenSupplierCompanyId_whensearchWorkersBySupplierCompanyId_thenThrowsException() {
         // Act & Assert
         when(workerDAO.findByCompanyId(1L)).thenThrow(new NotFoundException("Workers not found for the company"));
         assertThrows(NotFoundException.class, ()->accountServiceImpl.getWorkersBySupplierCompanyId(1L));
