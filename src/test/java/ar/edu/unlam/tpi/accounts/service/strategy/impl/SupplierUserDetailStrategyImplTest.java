@@ -4,18 +4,17 @@ import ar.edu.unlam.tpi.accounts.dto.request.UserDetailRequest;
 import ar.edu.unlam.tpi.accounts.models.SupplierCompanyEntity;
 import ar.edu.unlam.tpi.accounts.models.UserEntity;
 import ar.edu.unlam.tpi.accounts.persistence.dao.SupplierCompanyDAO;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-
-import java.util.Optional;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 
+@ExtendWith(MockitoExtension.class)
 public class SupplierUserDetailStrategyImplTest {
 
     @Mock
@@ -23,11 +22,6 @@ public class SupplierUserDetailStrategyImplTest {
 
     @InjectMocks
     private SupplierUserDetailStrategyImpl strategy;
-
-    @BeforeEach
-    void setUp() {
-        MockitoAnnotations.openMocks(this);
-    }
 
     @Test
     void givenUserTypeSupplier_whenSupports_thenReturnTrue() {

@@ -4,16 +4,17 @@ import ar.edu.unlam.tpi.accounts.dto.request.UserDetailRequest;
 import ar.edu.unlam.tpi.accounts.models.ApplicantCompanyEntity;
 import ar.edu.unlam.tpi.accounts.models.UserEntity;
 import ar.edu.unlam.tpi.accounts.persistence.dao.ApplicantCompanyDAO;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 
+@ExtendWith(MockitoExtension.class)
 public class ApplicantUserDetailStrategyImplTest {
 
     @Mock
@@ -21,11 +22,6 @@ public class ApplicantUserDetailStrategyImplTest {
 
     @InjectMocks
     private ApplicantUserDetailStrategyImpl strategy;
-
-    @BeforeEach
-    void setUp() {
-        MockitoAnnotations.openMocks(this);
-    }
 
     @Test
     void givenUserTypeApplicant_whenSupports_thenReturnTrue() {
