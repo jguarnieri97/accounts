@@ -13,5 +13,7 @@ public class UserDetailResponse {
     private String phone;
     private String address;
     private String cuit;
+    private double lat;
+    private double ln;
 
 }
