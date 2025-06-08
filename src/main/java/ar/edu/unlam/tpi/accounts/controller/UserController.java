@@ -1,6 +1,8 @@
 package ar.edu.unlam.tpi.accounts.controller;
 
+import ar.edu.unlam.tpi.accounts.dto.request.EmailRequest;
 import ar.edu.unlam.tpi.accounts.dto.request.UserRequest;
+import ar.edu.unlam.tpi.accounts.dto.response.UserDetailResponse;
 import ar.edu.unlam.tpi.accounts.dto.response.UserResponse;
 import ar.edu.unlam.tpi.accounts.dto.response.GenericResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -16,5 +18,10 @@ public interface UserController {
     @PostMapping
     @ResponseStatus(HttpStatus.OK)
     GenericResponse<UserResponse> getUsersDetails(@RequestBody List<UserRequest> users);
+
+    @PostMapping("/email")
+    @ResponseStatus(HttpStatus.OK)
+    GenericResponse<UserDetailResponse> getUsersDetailsEmail(@RequestBody EmailRequest user);
+
 }
 

@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface SupplierCompanyRepository extends JpaRepository<SupplierCompanyEntity, Long> {
 
@@ -29,4 +30,6 @@ public interface SupplierCompanyRepository extends JpaRepository<SupplierCompany
             @Param("ln") Float ln,
             @Param("radius") Float radius
     );
+
+    Optional<SupplierCompanyEntity> findByEmail(String email);
 }
