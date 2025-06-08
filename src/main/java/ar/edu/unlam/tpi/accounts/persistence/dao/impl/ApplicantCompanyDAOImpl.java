@@ -1,6 +1,8 @@
 package ar.edu.unlam.tpi.accounts.persistence.dao.impl;
 
 import java.util.List;
+
+import ar.edu.unlam.tpi.accounts.models.SupplierCompanyEntity;
 import ar.edu.unlam.tpi.accounts.persistence.dao.ApplicantCompanyDAO;
 import ar.edu.unlam.tpi.accounts.persistence.repository.ApplicantCompanyRepository;
 import ar.edu.unlam.tpi.accounts.models.ApplicantCompanyEntity;
@@ -34,6 +36,20 @@ public class ApplicantCompanyDAOImpl implements ApplicantCompanyDAO {
         } catch (NotFoundException e) {
             throw new NotFoundException(e.getDetail());
         } catch (Exception e) {
+            throw new InternalException(e.getMessage());
+        }
+    }
+
+    @Override
+    public ApplicantCompanyEntity findByEmail(String email) {
+        try{
+            return repository.findByEmail(email)
+                    .orElseThrow(()-> new NotFoundException("Supplier not found"));
+        }
+        catch (NotFoundException e) {
+            throw new NotFoundException(e.getDetail());
+        }
+        catch (Exception e) {
             throw new InternalException(e.getMessage());
         }
     }

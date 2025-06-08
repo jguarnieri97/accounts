@@ -1,5 +1,6 @@
 package ar.edu.unlam.tpi.accounts.service.impl;
 
+import ar.edu.unlam.tpi.accounts.dto.request.EmailRequest;
 import ar.edu.unlam.tpi.accounts.dto.request.UserDetailRequest;
 import ar.edu.unlam.tpi.accounts.dto.response.UserDetailResponse;
 import ar.edu.unlam.tpi.accounts.exceptions.NotFoundException;
@@ -30,13 +31,7 @@ public class UserServiceImpl implements UserService {
     
         for (UserRequest request : userRequests) {
             try {
-                UserDetailStrategy strategy = strategies.stream()
-                        .filter(s -> s.supports(request.getType()))
-                        .findFirst()
-                        .orElseThrow(() -> {
-                            log.warn("Tipo de usuario no válido: {}", request.getType());
-                            return new IllegalArgumentException("Tipo de usuario no válido");
-                        });
+                UserDetailStrategy strategy = getStrategy(request.getType());
     
                 UserEntity user = strategy.getUser(
                         UserDetailRequest.builder()
@@ -71,8 +66,27 @@ public class UserServiceImpl implements UserService {
                 .workers(workers)
                 .build();
     }
-    
-    
+
+    @Override
+    public UserDetailResponse getUsersDetailEmail(EmailRequest userRequest) {
+        log.info("Buscando detalles del usuario por email: {}", userRequest.getEmail());
+        UserDetailStrategy strategy = getStrategy(userRequest.getType());
+
+        UserEntity user = strategy.getUserEmail(userRequest);
+        log.info("Usuario encontrado: {}", user.getId());
+
+        return UserDetailResponseBuilder.build(user);
+    }
+
+    private UserDetailStrategy getStrategy(String type) {
+        return strategies.stream()
+                .filter(s -> s.supports(type))
+                .findFirst()
+                .orElseThrow(() -> {
+                    log.warn("Tipo de usuario no válido: {}", type);
+                    return new IllegalArgumentException("Tipo de usuario no válido");
+                });
+    }
 
 
 }

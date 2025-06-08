@@ -25,6 +25,8 @@ public interface GenericInterfaceDAO<T, ID> {
      */
     T findById(ID id);
 
+    T findByEmail(String email);
+
     /**
      * Guarda una nueva entidad o actualiza una existente.
      *

@@ -59,7 +59,21 @@ public class SupplierCompanyDAOImpl implements SupplierCompanyDAO {
             throw new InternalException(e.getMessage());
         }
     }
-    
+
+    @Override
+    public SupplierCompanyEntity findByEmail(String email) {
+        try{
+            return repository.findByEmail(email)
+                    .orElseThrow(()-> new NotFoundException("Supplier not found"));
+        }
+        catch (NotFoundException e) {
+            throw new NotFoundException(e.getDetail());
+        }
+        catch (Exception e) {
+            throw new InternalException(e.getMessage());
+        }
+    }
+
     @Override
     public SupplierCompanyEntity save(SupplierCompanyEntity supplierCompany) {
         try{

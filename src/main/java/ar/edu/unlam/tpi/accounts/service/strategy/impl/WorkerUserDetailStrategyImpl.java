@@ -1,5 +1,6 @@
 package ar.edu.unlam.tpi.accounts.service.strategy.impl;
 
+import ar.edu.unlam.tpi.accounts.dto.request.EmailRequest;
 import ar.edu.unlam.tpi.accounts.dto.request.UserDetailRequest;
 import ar.edu.unlam.tpi.accounts.models.UserEntity;
 import ar.edu.unlam.tpi.accounts.persistence.dao.WorkerDAO;
@@ -21,6 +22,11 @@ public class WorkerUserDetailStrategyImpl implements UserDetailStrategy {
     @Override
     public UserEntity getUser(UserDetailRequest request) {
         return workerRepository.findById(request.getUserId());
+    }
+
+    @Override
+    public UserEntity getUserEmail(EmailRequest userRequest) {
+        return workerRepository.findByEmail(userRequest.getEmail());
     }
 
 }

@@ -61,6 +61,20 @@ public class WorkerDAOImpl implements WorkerDAO {
     }
 
     @Override
+    public WorkerEntity findByEmail(String email) {
+        try{
+            return repository.findByEmail(email)
+                    .orElseThrow(()-> new NotFoundException("Worker not found"));
+        }
+        catch (NotFoundException e) {
+            throw new NotFoundException(e.getDetail());
+        }
+        catch (Exception e) {
+            throw new InternalException(e.getMessage());
+        }
+    }
+
+    @Override
     public WorkerEntity save(WorkerEntity worker) {
         try{
             return repository.save(worker);
