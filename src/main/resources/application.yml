@@ -1,5 +1,3 @@
-app.start.mode: ${APP_START_MODE:dev}
-
 spring:
   application:
     name: Accounts
