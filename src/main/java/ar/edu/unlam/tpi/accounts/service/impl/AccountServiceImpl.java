@@ -72,12 +72,12 @@ public class AccountServiceImpl implements AccountService {
 
         ApplicantCompanyEntity applicant = applicantCompanyDAO.findById(metrics.getApplicantId());
 
-        CommentaryEntity commentaryEntity = CommentaryEntity.builder()
-                .comment(metrics.getComment())
-                .score(metrics.getScore())
-                .supplierCompany(supplier)
-                .applicantCompany(applicant)
-                .build();
+        CommentaryEntity commentaryEntity = new CommentaryEntity(
+                metrics.getComment(),
+                metrics.getScore(),
+                supplier,
+                applicant
+        );
 
         commentaryRepository.save(commentaryEntity);
         supplierCompanyDAO.save(supplier);

@@ -24,7 +24,7 @@ import lombok.AllArgsConstructor;
 public class CommentaryEntity {
     @Id
     @Column(name = "id", unique = true, nullable = false)
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
     private String comment;
@@ -37,4 +37,11 @@ public class CommentaryEntity {
     @ManyToOne
     @JoinColumn(name = "applicant_id")
     private ApplicantCompanyEntity applicantCompany;
+
+    public CommentaryEntity(String comment, Double score, SupplierCompanyEntity supplierCompany, ApplicantCompanyEntity applicantCompany) {
+        this.comment = comment;
+        this.score = score;
+        this.supplierCompany = supplierCompany;
+        this.applicantCompany = applicantCompany;
+    }
 }
