@@ -13,4 +13,4 @@ server:
 
 supplier:
   search:
-    radius: ${SEARCH_RADIUS:49}
+    radius: ${SEARCH_RADIUS:50}
