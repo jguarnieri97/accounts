@@ -20,7 +20,7 @@ import lombok.experimental.SuperBuilder;
 public abstract class UserEntity {
     @Id
     @Column(name = "id", unique = true, nullable = false)
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "user_name")
