@@ -16,7 +16,7 @@ public interface AccountService {
      *
      * @return una lista de objetos {@link SupplierResponseDto}.
      */
-    List<SupplierResponseDto> getAllSuppliers(String category, Float lat, Float ln);
+    List<SupplierResponseDto> getAllSuppliers(String category, Float lat, Float ln, String workResume);
 
     /**
      * Obtiene los detalles de un proveedor específico por su ID.

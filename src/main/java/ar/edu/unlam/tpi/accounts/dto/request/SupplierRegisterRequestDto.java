@@ -10,9 +10,7 @@ import java.util.List;
 @Getter
 @Setter
 public class SupplierRegisterRequestDto extends BaseUserRegisterRequestDto{
-    @NotNull
-    private Long companyId;
-
+    
     @NotNull
     private Float lat;
 

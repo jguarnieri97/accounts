@@ -6,6 +6,7 @@ import ar.edu.unlam.tpi.accounts.utils.Converter;
 import ar.edu.unlam.tpi.accounts.utils.MetricsCalculator;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -25,6 +26,7 @@ import ar.edu.unlam.tpi.accounts.dto.response.WorkerResponseDto;
 import ar.edu.unlam.tpi.accounts.models.ApplicantCompanyEntity;
 import ar.edu.unlam.tpi.accounts.models.CommentaryEntity;
 import ar.edu.unlam.tpi.accounts.models.SupplierCompanyEntity;
+import ar.edu.unlam.tpi.accounts.mapper.LabelMapper;
 
 @Service
 @Transactional
@@ -37,17 +39,39 @@ public class AccountServiceImpl implements AccountService {
     private final CommentaryRepository commentaryRepository;
     private final ApplicantCompanyDAO applicantCompanyDAO;
     private final MetricsCalculator metricsCalculator;
+    private final LabelMapper labelMapper;
     @Value("${supplier.search.radius}")
     private Float searchRadius;
 
     @Override
-    public List<SupplierResponseDto> getAllSuppliers(String category, Float lat, Float ln) {
-        Integer companyTypeOrdinal = category != null ? CompanyTypeEnum.valueOf(category).ordinal() : null;
-        return supplierCompanyDAO.findByCategoryAndLatAndLn(companyTypeOrdinal, lat, ln, searchRadius)
-            .stream()
-            .map(supplier -> Converter.convertToDto(supplier, SupplierResponseDto.class))
-            .collect(Collectors.toList());
+public List<SupplierResponseDto> getAllSuppliers(String category, Float lat, Float ln, String workResume) {
+    Integer companyTypeOrdinal = category != null ? CompanyTypeEnum.valueOf(category).ordinal() : null;
+
+    List<SupplierCompanyEntity> suppliers = supplierCompanyDAO.findByCategoryAndLatAndLn(
+        companyTypeOrdinal, lat, ln, searchRadius
+    );
+
+    if (workResume != null && !workResume.isBlank()) {
+        Optional<String> mappedTag = labelMapper.getLabelByWorkResume(workResume);
+        if (mappedTag.isPresent()) {
+            String tag = mappedTag.get();
+            suppliers = suppliers.stream()
+                .filter(supplier -> supplier.getLabels() != null &&
+                    supplier.getLabels().stream()
+                        .anyMatch(label -> label.getTag().equalsIgnoreCase(tag)))
+                .toList();
+        } else {
+          
+            return List.of();
+        }
     }
+
+    return suppliers.stream()
+        .map(supplier -> Converter.convertToDto(supplier, SupplierResponseDto.class))
+        .collect(Collectors.toList());
+}
+
+    
 
     @Override
     public SupplierResponseDto getSupplierById(Long id) {

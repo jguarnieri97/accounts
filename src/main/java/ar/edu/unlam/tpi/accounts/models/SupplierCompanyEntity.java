@@ -33,4 +33,8 @@ public class SupplierCompanyEntity extends CompanyEntity {
     
     @OneToMany(mappedBy = "supplierCompany", orphanRemoval = true)
     private Set<CommentaryEntity> commentaries = new HashSet<>();
+
+    @OneToMany(mappedBy = "supplier", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<LabelEntity> labels = new HashSet<>();
+    
 }

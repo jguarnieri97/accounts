@@ -27,23 +27,28 @@ public class AccountControllerImplTest {
     private AccountControllerImpl accountController;
 
     @Test
-    void givenCategoryAndLocation_whenGetAllSuppliers_thenReturnSupplierList() {
-        // Given
-        String category = "agro";
-        Float lat = -34.6340f;
-        Float ln = -58.4065f;
-        List<SupplierResponseDto> suppliers = List.of(new SupplierResponseDto());
-        when(accountService.getAllSuppliers(category, lat, ln)).thenReturn(suppliers);
+void givenCategoryAndLocationAndWorkResume_whenGetAllSuppliers_thenReturnSupplierList() {
+    // Given
+    String category = "AGRO";
+    Float lat = -34.6340f;
+    Float ln = -58.4065f;
+    String workResume = "techo";
 
-        // When
-        GenericResponse<List<SupplierResponseDto>> response = accountController.getAllSuppliers(category, lat, ln);
+    List<SupplierResponseDto> suppliers = List.of(new SupplierResponseDto());
 
-        // Then
-        assertNotNull(response);
-        assertEquals(Constants.STATUS_OK, response.getCode());
-        assertEquals(Constants.SUCCESS_MESSAGE, response.getMessage());
-        assertEquals(suppliers, response.getData());
-    }
+    // Mock
+    when(accountService.getAllSuppliers(category, lat, ln, workResume)).thenReturn(suppliers);
+
+    // When
+    GenericResponse<List<SupplierResponseDto>> response =
+        accountController.getAllSuppliers(category, lat, ln, workResume);
+
+    // Then
+    assertNotNull(response);
+    assertEquals(Constants.STATUS_OK, response.getCode());
+    assertEquals(Constants.SUCCESS_MESSAGE, response.getMessage());
+    assertEquals(suppliers, response.getData());
+}
 
     @Test
     void givenSupplierId_whenGetSupplierById_thenReturnSupplierDetails() {
