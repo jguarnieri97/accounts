@@ -7,8 +7,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class AccountsApplication {
 
 	public static void main(String[] args) {
-		SpringApplication app = new SpringApplication(AccountsApplication.class);
-		app.setAdditionalProfiles("test"); // activa el perfil "test"
-		app.run(args);
+		SpringApplication.run(AccountsApplication.class, args);
 	}
 }
