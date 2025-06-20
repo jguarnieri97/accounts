@@ -25,7 +25,7 @@ public interface SupplierCompanyRepository extends JpaRepository<SupplierCompany
             nativeQuery = true
     )
     List<SupplierCompanyEntity> findByCategoryAndLatAndLn(
-            @Param("category") Integer category,
+            @Param("category") Long category,
             @Param("lat") Float lat,
             @Param("ln") Float ln,
             @Param("radius") Float radius
