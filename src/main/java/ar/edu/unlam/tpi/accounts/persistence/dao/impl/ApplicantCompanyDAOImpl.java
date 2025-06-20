@@ -2,7 +2,6 @@ package ar.edu.unlam.tpi.accounts.persistence.dao.impl;
 
 import java.util.List;
 
-import ar.edu.unlam.tpi.accounts.models.SupplierCompanyEntity;
 import ar.edu.unlam.tpi.accounts.persistence.dao.ApplicantCompanyDAO;
 import ar.edu.unlam.tpi.accounts.persistence.repository.ApplicantCompanyRepository;
 import ar.edu.unlam.tpi.accounts.models.ApplicantCompanyEntity;

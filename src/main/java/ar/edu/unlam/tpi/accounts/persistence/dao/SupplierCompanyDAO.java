@@ -10,5 +10,5 @@ public interface SupplierCompanyDAO extends GenericInterfaceDAO<SupplierCompanyE
      *
      * @return a list of all supplier companies.
      */
-    List<SupplierCompanyEntity> findByCategoryAndLatAndLn(Integer category, Float lat, Float ln, Float radius);
+    List<SupplierCompanyEntity> findByCategoryAndLatAndLn(Long category, Float lat, Float ln, Float radius);
 }

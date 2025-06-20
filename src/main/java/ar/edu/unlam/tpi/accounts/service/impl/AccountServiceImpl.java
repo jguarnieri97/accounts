@@ -1,6 +1,5 @@
 package ar.edu.unlam.tpi.accounts.service.impl;
 
-import ar.edu.unlam.tpi.accounts.models.CompanyTypeEnum;
 import ar.edu.unlam.tpi.accounts.service.AccountService;
 import ar.edu.unlam.tpi.accounts.utils.Converter;
 import ar.edu.unlam.tpi.accounts.utils.MetricsCalculator;
@@ -15,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import ar.edu.unlam.tpi.accounts.persistence.dao.ApplicantCompanyDAO;
+import ar.edu.unlam.tpi.accounts.persistence.dao.CategoryDAO;
 import ar.edu.unlam.tpi.accounts.persistence.dao.SupplierCompanyDAO;
 import ar.edu.unlam.tpi.accounts.persistence.dao.WorkerDAO;
 import ar.edu.unlam.tpi.accounts.persistence.repository.CommentaryRepository;
@@ -23,6 +23,7 @@ import ar.edu.unlam.tpi.accounts.dto.request.MetricRequestDto;
 import ar.edu.unlam.tpi.accounts.dto.response.SupplierResponseDto;
 import ar.edu.unlam.tpi.accounts.dto.response.WorkerResponseDto;
 import ar.edu.unlam.tpi.accounts.models.ApplicantCompanyEntity;
+import ar.edu.unlam.tpi.accounts.models.CategoryEntity;
 import ar.edu.unlam.tpi.accounts.models.CommentaryEntity;
 import ar.edu.unlam.tpi.accounts.models.SupplierCompanyEntity;
 
@@ -37,13 +38,16 @@ public class AccountServiceImpl implements AccountService {
     private final CommentaryRepository commentaryRepository;
     private final ApplicantCompanyDAO applicantCompanyDAO;
     private final MetricsCalculator metricsCalculator;
+    private final CategoryDAO categoryDAO;
+
     @Value("${supplier.search.radius}")
     private Float searchRadius;
 
     @Override
     public List<SupplierResponseDto> getAllSuppliers(String category, Float lat, Float ln) {
-        Integer companyTypeOrdinal = category != null ? CompanyTypeEnum.valueOf(category).ordinal() : null;
-        return supplierCompanyDAO.findByCategoryAndLatAndLn(companyTypeOrdinal, lat, ln, searchRadius)
+        //Integer companyTypeOrdinal = category != null ? CompanyTypeEnum.valueOf(category).ordinal() : null;
+        CategoryEntity categoryType = categoryDAO.findByName(category);
+        return supplierCompanyDAO.findByCategoryAndLatAndLn(categoryType.getId(), lat, ln, searchRadius)
             .stream()
             .map(supplier -> Converter.convertToDto(supplier, SupplierResponseDto.class))
             .collect(Collectors.toList());

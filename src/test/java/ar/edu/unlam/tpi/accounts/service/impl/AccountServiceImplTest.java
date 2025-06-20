@@ -5,6 +5,7 @@ import static org.mockito.Mockito.when;
 
 import java.util.List;
 
+import ar.edu.unlam.tpi.accounts.models.CategoryEntity;
 import ar.edu.unlam.tpi.accounts.models.SupplierCompanyEntity;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,6 +17,7 @@ import ar.edu.unlam.tpi.accounts.dto.response.SupplierResponseDto;
 import ar.edu.unlam.tpi.accounts.dto.response.WorkerResponseDto;
 import ar.edu.unlam.tpi.accounts.exceptions.NotFoundException;
 import ar.edu.unlam.tpi.accounts.persistence.dao.impl.ApplicantCompanyDAOImpl;
+import ar.edu.unlam.tpi.accounts.persistence.dao.impl.CategoryDAOImpl;
 import ar.edu.unlam.tpi.accounts.persistence.dao.impl.SupplierCompanyDAOImpl;
 import ar.edu.unlam.tpi.accounts.persistence.dao.impl.WorkerDAOImpl;
 import ar.edu.unlam.tpi.accounts.persistence.repository.CommentaryRepository;
@@ -39,6 +41,9 @@ public class AccountServiceImplTest {
 
     @Mock
     private ApplicantCompanyDAOImpl applicantCompanyDAO;
+
+    @Mock
+    private CategoryDAOImpl categoryDAOImpl;
 
     @InjectMocks
     private AccountServiceImpl accountServiceImpl;
@@ -96,7 +101,7 @@ public class AccountServiceImplTest {
     void givenCategoryAndLocation_whenGetAllSuppliers_thenReturnSupplierResponseDtoList() {
         // Given
         String category = "ELECTRICIAN";
-        Integer categoryEnum = 0;
+        Long categoryEnum = 0L;
         Float lat = -34.6340f;
         Float ln = -58.4065f;
         Float radius = 10f;
@@ -105,6 +110,7 @@ public class AccountServiceImplTest {
         // Setea el valor de searchRadius en el servicio antes de llamar al método
         ReflectionTestUtils.setField(accountServiceImpl, "searchRadius", radius);
 
+        when(categoryDAOImpl.findByName(category)).thenReturn(new CategoryEntity(categoryEnum, category));
         when(supplierCompanyDAO.findByCategoryAndLatAndLn(categoryEnum, lat, ln, radius)).thenReturn(suppliers);
 
         // When

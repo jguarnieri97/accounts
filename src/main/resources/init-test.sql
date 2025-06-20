@@ -1,6 +1,13 @@
 -- Creación de Esquemas --
 CREATE SCHEMA USERS;
 
+
+CREATE TABLE USERS.CATEGORY
+(
+    id          BIGINT AUTO_INCREMENT PRIMARY KEY,
+    name        VARCHAR(150) NOT NULL
+);
+
 CREATE TABLE USERS.SUPPLIER_COMPANY
 (
     id                  BIGINT AUTO_INCREMENT PRIMARY KEY,
@@ -17,7 +24,8 @@ CREATE TABLE USERS.SUPPLIER_COMPANY
     avg_score           FLOAT,
     avg_price           FLOAT,
     comments_count      INT,
-    company_type        INT
+    company_type        BIGINT,
+    FOREIGN KEY (company_type) REFERENCES USERS.CATEGORY (id)
 );
 
 CREATE TABLE USERS.WORKER
@@ -59,42 +67,50 @@ CREATE TABLE USERS.COMMENTARY
     FOREIGN KEY (applicant_id) REFERENCES USERS.APPLICANT_COMPANY (id)
 );
 
+
+-- CREACION DE CATEGORIAS--
+INSERT INTO USERS.CATEGORY (name)
+VALUES 
+    ('ELECTRICIAN'),
+    ('CONTRACTOR'),
+    ('CLEANING');
+
 -- CREACIÓN DE USUARIOS --
 
 -- PROVEEDORES --
 
--- EMPRESAS DE ELECTRICIDAD (company_type = 0)
+-- EMPRESAS DE ELECTRICIDAD (company_type = 1)
 INSERT INTO USERS.SUPPLIER_COMPANY
 (email, user_name, phone, user_address, cuit, is_active, lat, ln, is_verified, company_description, avg_score, avg_price, comments_count, company_type)
 VALUES
-    ('info@electroandes.com', 'Electro Andes', '1134567890', 'Av. Corrientes 1234, CABA', '30-11223344-5', 1, -34.6037, -58.3816, 1, 'Servicios de instalación eléctrica industrial y domiciliaria', 4.6, 1500.00, 28, 0),
-    ('contacto@voltmax.com', 'VoltMax', '1167890123', 'Av. Brig. Gral. Juan Manuel de Rosas 3910, San Justo', '30-22334455-6', 1, -34.6839, -58.5634, 1, 'Mantenimiento eléctrico y sistemas de media tensión', 4.4, 1700.00, 22, 0),
-    ('servicios@luzsur.com', 'Luz Sur S.A.', '1122334455', 'Mendoza 2150, Capital Federal', '30-33445566-7', 1, -34.5547, -58.4564, 1, 'Montajes eléctricos y luminarias LED', 4.5, 1600.00, 19, 0),
-    ('electricidad.norte@example.com', 'ElectroNorte SA', '+541145678901', 'Av. Corrientes 1234, CABA', '30-12345678-9', 1, -34.6037, -58.3816, 1, 'Servicios de instalación y mantenimiento eléctrico residencial e industrial.', 4.8, 50.00, 120, 0),
-    ('energia.azul@example.com', 'Energía Azul SRL', '+541123456789', 'Av. Rivadavia 13500, San Justo', '20-98765432-1', 1, -34.6784, -58.5627, 1, 'Proveedor de soluciones energéticas y reparaciones eléctricas urgentes.', 4.5, 55.50, 95, 0),
-    ('luz.segura@example.com', 'Luz Segura', '+543415678901', 'Av. Corrientes 5200, Capital Federal', '27-11223344-5', 1, -34.6021, -58.4303, 1, 'Instalaciones eléctricas seguras y certificadas para hogares y comercios.', 4.7, 48.75, 110, 0);
+    ('info@electroandes.com', 'Electro Andes', '1134567890', 'Av. Corrientes 1234, CABA', '30-11223344-5', 1, -34.6037, -58.3816, 1, 'Servicios de instalación eléctrica industrial y domiciliaria', 4.6, 1500.00, 28, 1),
+    ('contacto@voltmax.com', 'VoltMax', '1167890123', 'Av. Brig. Gral. Juan Manuel de Rosas 3910, San Justo', '30-22334455-6', 1, -34.6839, -58.5634, 1, 'Mantenimiento eléctrico y sistemas de media tensión', 4.4, 1700.00, 22, 1),
+    ('servicios@luzsur.com', 'Luz Sur S.A.', '1122334455', 'Mendoza 2150, Capital Federal', '30-33445566-7', 1, -34.5547, -58.4564, 1, 'Montajes eléctricos y luminarias LED', 4.5, 1600.00, 19, 1),
+    ('electricidad.norte@example.com', 'ElectroNorte SA', '+541145678901', 'Av. Corrientes 1234, CABA', '30-12345678-9', 1, -34.6037, -58.3816, 1, 'Servicios de instalación y mantenimiento eléctrico residencial e industrial.', 4.8, 50.00, 120, 1),
+    ('energia.azul@example.com', 'Energía Azul SRL', '+541123456789', 'Av. Rivadavia 13500, San Justo', '20-98765432-1', 1, -34.6784, -58.5627, 1, 'Proveedor de soluciones energéticas y reparaciones eléctricas urgentes.', 4.5, 55.50, 95, 1),
+    ('luz.segura@example.com', 'Luz Segura', '+543415678901', 'Av. Corrientes 5200, Capital Federal', '27-11223344-5', 1, -34.6021, -58.4303, 1, 'Instalaciones eléctricas seguras y certificadas para hogares y comercios.', 4.7, 48.75, 110, 1);
 
--- EMPRESAS DE CONTRATISTAS (company_type = 1)
+-- EMPRESAS DE CONTRATISTAS (company_type = 2)
 INSERT INTO USERS.SUPPLIER_COMPANY
 (email, user_name, phone, user_address, cuit, is_active, lat, ln, is_verified, company_description, avg_score, avg_price, comments_count, company_type)
 VALUES
-    ('proyectos@construnorte.com', 'Construnorte', '1144778899', 'Ruta 8 Km 12, San Martín, Buenos Aires', '30-44556677-8', 1, -34.5585, -58.7283, 1, 'Obras civiles y contrataciones públicas', 4.2, 2500.00, 35, 1),
-    ('gestion@obrasdelitoral.com', 'Obras del Litoral', '1155996633', 'Av. Illia 2900, San Justo', '30-55667788-9', 1, -34.6792, -58.5715, 1, 'Empresa contratista para infraestructura urbana', 4.3, 2200.00, 31, 1),
-    ('admin@infraandes.com', 'Infra Andes', '1133001122', 'Av. Cabildo 3200, Capital Federal', '30-66778899-0', 1, -34.5622, -58.4566, 1, 'Contratistas generales para obra pública', 4.1, 2300.00, 29, 1),
-    ('construcciones.sur@example.com', 'Constructora del Sur', '+542234567890', 'Av. Juan Manuel de Rosas 8499, San Justo', '30-55667788-9', 1, -34.6940, -58.5960, 1, 'Servicios integrales de construcción y reformas edilicias.', 4.6, 120.00, 80, 1),
-    ('reformas.express@example.com', 'Reformas Express', '+541178901234', 'Santa Fe 2000, CABA', '23-99887766-5', 1, -34.5997, -58.4190, 1, 'Contratistas especializados en remodelaciones rápidas y eficientes.', 4.4, 90.50, 65, 1),
-    ('proyectos.integrales@example.com', 'Proyectos Integrales', '+543511234567', 'Av. Santa Fe 3100, Capital Federal', '30-44556677-8', 1, -34.5889, -58.4088, 1, 'Gestión y ejecución de proyectos de obra civil y arquitectura.', 4.7, 130.25, 70, 1);
+    ('proyectos@construnorte.com', 'Construnorte', '1144778899', 'Ruta 8 Km 12, San Martín, Buenos Aires', '30-44556677-8', 1, -34.5585, -58.7283, 1, 'Obras civiles y contrataciones públicas', 4.2, 2500.00, 35, 2),
+    ('gestion@obrasdelitoral.com', 'Obras del Litoral', '1155996633', 'Av. Illia 2900, San Justo', '30-55667788-9', 1, -34.6792, -58.5715, 1, 'Empresa contratista para infraestructura urbana', 4.3, 2200.00, 31, 2),
+    ('admin@infraandes.com', 'Infra Andes', '1133001122', 'Av. Cabildo 3200, Capital Federal', '30-66778899-0', 1, -34.5622, -58.4566, 1, 'Contratistas generales para obra pública', 4.1, 2300.00, 29, 2),
+    ('construcciones.sur@example.com', 'Constructora del Sur', '+542234567890', 'Av. Juan Manuel de Rosas 8499, San Justo', '30-55667788-9', 1, -34.6940, -58.5960, 1, 'Servicios integrales de construcción y reformas edilicias.', 4.6, 120.00, 80, 2),
+    ('reformas.express@example.com', 'Reformas Express', '+541178901234', 'Santa Fe 2000, CABA', '23-99887766-5', 1, -34.5997, -58.4190, 1, 'Contratistas especializados en remodelaciones rápidas y eficientes.', 4.4, 90.50, 65, 2),
+    ('proyectos.integrales@example.com', 'Proyectos Integrales', '+543511234567', 'Av. Santa Fe 3100, Capital Federal', '30-44556677-8', 1, -34.5889, -58.4088, 1, 'Gestión y ejecución de proyectos de obra civil y arquitectura.', 4.7, 130.25, 70, 2);
 
--- EMPRESAS DE LIMPIEZA (company_type = 2)
+-- EMPRESAS DE LIMPIEZA (company_type = 3)
 INSERT INTO USERS.SUPPLIER_COMPANY
 (email, user_name, phone, user_address, cuit, is_active, lat, ln, is_verified, company_description, avg_score, avg_price, comments_count, company_type)
 VALUES
-    ('servicios@cleanpro.com', 'CleanPro', '1198765432', 'Av. Santa Fe 3000, CABA', '30-77889900-1', 1, -34.5865, -58.4103, 1, 'Limpieza de oficinas y espacios industriales', 4.7, 900.00, 40, 2),
-    ('ventas@limpiezanorte.com', 'Limpieza Norte', '1177889900', 'Av. Presidente Perón 3300, San Justo', '30-88990011-2', 1, -34.6712, -58.5521, 1, 'Servicios de limpieza profesional y sanitización', 4.5, 850.00, 36, 2),
-    ('info@higienizar.com', 'Higienizar S.A.', '1122556677', 'Av. Belgrano 1100, Capital Federal', '30-99001122-3', 1, -34.6126, -58.3843, 1, 'Empresa de limpieza integral y mantenimiento', 4.6, 880.00, 33, 2),
-    ('limpieza.total@example.com', 'Limpieza Total SRL', '+541133445566', 'Juncal 800, CABA', '30-11223344-0', 1, -34.5950, -58.3870, 1, 'Servicios de limpieza profesional para oficinas, hogares y consorcios.', 4.9, 35.00, 150, 2),
-    ('brillo.extremo@example.com', 'Brillo Extremo', '+542617890123', 'Av. Brig. Gral. Juan Manuel de Rosas 3910, San Justo', '20-66778899-0', 1, -34.6839, -58.5634, 1, 'Limpieza profunda y desinfección para todo tipo de ambientes.', 4.6, 40.20, 100, 2),
-    ('higienizar.ya@example.com', 'Higienizar Ya', '+543871234567', 'Av. Corrientes 5200, Capital Federal', '27-10203040-1', 1, -34.6021, -58.4303, 1, 'Soluciones de higiene y mantenimiento para empresas y particulares.', 4.7, 38.50, 130, 2);
+    ('servicios@cleanpro.com', 'CleanPro', '1198765432', 'Av. Santa Fe 3000, CABA', '30-77889900-1', 1, -34.5865, -58.4103, 1, 'Limpieza de oficinas y espacios industriales', 4.7, 900.00, 40, 3),
+    ('ventas@limpiezanorte.com', 'Limpieza Norte', '1177889900', 'Av. Presidente Perón 3300, San Justo', '30-88990011-2', 1, -34.6712, -58.5521, 1, 'Servicios de limpieza profesional y sanitización', 4.5, 850.00, 36, 3),
+    ('info@higienizar.com', 'Higienizar S.A.', '1122556677', 'Av. Belgrano 1100, Capital Federal', '30-99001122-3', 1, -34.6126, -58.3843, 1, 'Empresa de limpieza integral y mantenimiento', 4.6, 880.00, 33, 3),
+    ('limpieza.total@example.com', 'Limpieza Total SRL', '+541133445566', 'Juncal 800, CABA', '30-11223344-0', 1, -34.5950, -58.3870, 1, 'Servicios de limpieza profesional para oficinas, hogares y consorcios.', 4.9, 35.00, 150, 3),
+    ('brillo.extremo@example.com', 'Brillo Extremo', '+542617890123', 'Av. Brig. Gral. Juan Manuel de Rosas 3910, San Justo', '20-66778899-0', 1, -34.6839, -58.5634, 1, 'Limpieza profunda y desinfección para todo tipo de ambientes.', 4.6, 40.20, 100, 3),
+    ('higienizar.ya@example.com', 'Higienizar Ya', '+543871234567', 'Av. Corrientes 5200, Capital Federal', '27-10203040-1', 1, -34.6021, -58.4303, 1, 'Soluciones de higiene y mantenimiento para empresas y particulares.', 4.7, 38.50, 130, 3);
 
 
 -- TRABAJADORES --
