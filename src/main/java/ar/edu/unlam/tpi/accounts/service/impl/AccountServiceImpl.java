@@ -26,8 +26,10 @@ import ar.edu.unlam.tpi.accounts.dto.response.WorkerResponseDto;
 import ar.edu.unlam.tpi.accounts.models.ApplicantCompanyEntity;
 import ar.edu.unlam.tpi.accounts.models.CategoryEntity;
 import ar.edu.unlam.tpi.accounts.models.CommentaryEntity;
+import ar.edu.unlam.tpi.accounts.models.LabelEntity;
 import ar.edu.unlam.tpi.accounts.models.SupplierCompanyEntity;
 import ar.edu.unlam.tpi.accounts.mapper.LabelMapper;
+import ar.edu.unlam.tpi.accounts.exceptions.NotFoundException;
 
 @Service
 @Transactional
@@ -59,8 +61,16 @@ public class AccountServiceImpl implements AccountService {
             categoryId, lat, ln, searchRadius
         );
     
+        suppliers.forEach(s -> {
+            int labelSize = s.getLabels().size();
+            log.info("Supplier {} tiene {} labels: {}", s.getId(), labelSize, 
+                     s.getLabels().stream().map(LabelEntity::getTag).toList());
+        });
+        log.info("💡 workResume recibido en servicio: '{}'", workResume);
+
         if (workResume != null && !workResume.isBlank()) {
             Optional<String> mappedTag = labelMapper.getLabelByWorkResume(workResume);
+            log.info("Tag mapeado desde '{}': {}", workResume, mappedTag);
             if (mappedTag.isPresent()) {
                 String tag = mappedTag.get();
                 suppliers = suppliers.stream()
@@ -69,7 +79,7 @@ public class AccountServiceImpl implements AccountService {
                             .anyMatch(label -> label.getTag().equalsIgnoreCase(tag)))
                     .toList();
             } else {
-                return List.of();
+                throw new NotFoundException("No se encontró ningún proveedor con el tag mapeado");
             }
         }
     
