@@ -1,6 +1,5 @@
 package ar.edu.unlam.tpi.accounts.service.impl;
 
-import ar.edu.unlam.tpi.accounts.models.CompanyTypeEnum;
 import ar.edu.unlam.tpi.accounts.service.AccountService;
 import ar.edu.unlam.tpi.accounts.utils.Converter;
 import ar.edu.unlam.tpi.accounts.utils.MetricsCalculator;
@@ -16,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import ar.edu.unlam.tpi.accounts.persistence.dao.ApplicantCompanyDAO;
+import ar.edu.unlam.tpi.accounts.persistence.dao.CategoryDAO;
 import ar.edu.unlam.tpi.accounts.persistence.dao.SupplierCompanyDAO;
 import ar.edu.unlam.tpi.accounts.persistence.dao.WorkerDAO;
 import ar.edu.unlam.tpi.accounts.persistence.repository.CommentaryRepository;
@@ -24,6 +24,7 @@ import ar.edu.unlam.tpi.accounts.dto.request.MetricRequestDto;
 import ar.edu.unlam.tpi.accounts.dto.response.SupplierResponseDto;
 import ar.edu.unlam.tpi.accounts.dto.response.WorkerResponseDto;
 import ar.edu.unlam.tpi.accounts.models.ApplicantCompanyEntity;
+import ar.edu.unlam.tpi.accounts.models.CategoryEntity;
 import ar.edu.unlam.tpi.accounts.models.CommentaryEntity;
 import ar.edu.unlam.tpi.accounts.models.SupplierCompanyEntity;
 import ar.edu.unlam.tpi.accounts.mapper.LabelMapper;
@@ -40,36 +41,42 @@ public class AccountServiceImpl implements AccountService {
     private final ApplicantCompanyDAO applicantCompanyDAO;
     private final MetricsCalculator metricsCalculator;
     private final LabelMapper labelMapper;
+    private final CategoryDAO categoryDAO;
+
     @Value("${supplier.search.radius}")
     private Float searchRadius;
 
+
     @Override
-public List<SupplierResponseDto> getAllSuppliers(String category, Float lat, Float ln, String workResume) {
-    Integer companyTypeOrdinal = category != null ? CompanyTypeEnum.valueOf(category).ordinal() : null;
-
-    List<SupplierCompanyEntity> suppliers = supplierCompanyDAO.findByCategoryAndLatAndLn(
-        companyTypeOrdinal, lat, ln, searchRadius
-    );
-
-    if (workResume != null && !workResume.isBlank()) {
-        Optional<String> mappedTag = labelMapper.getLabelByWorkResume(workResume);
-        if (mappedTag.isPresent()) {
-            String tag = mappedTag.get();
-            suppliers = suppliers.stream()
-                .filter(supplier -> supplier.getLabels() != null &&
-                    supplier.getLabels().stream()
-                        .anyMatch(label -> label.getTag().equalsIgnoreCase(tag)))
-                .toList();
-        } else {
-          
-            return List.of();
+    public List<SupplierResponseDto> getAllSuppliers(String category, Float lat, Float ln, String workResume) {
+        Long categoryId = null;
+        if (category != null) {
+            CategoryEntity categoryType = categoryDAO.findByName(category);
+            categoryId = categoryType != null ? categoryType.getId() : null;
         }
+    
+        List<SupplierCompanyEntity> suppliers = supplierCompanyDAO.findByCategoryAndLatAndLn(
+            categoryId, lat, ln, searchRadius
+        );
+    
+        if (workResume != null && !workResume.isBlank()) {
+            Optional<String> mappedTag = labelMapper.getLabelByWorkResume(workResume);
+            if (mappedTag.isPresent()) {
+                String tag = mappedTag.get();
+                suppliers = suppliers.stream()
+                    .filter(supplier -> supplier.getLabels() != null &&
+                        supplier.getLabels().stream()
+                            .anyMatch(label -> label.getTag().equalsIgnoreCase(tag)))
+                    .toList();
+            } else {
+                return List.of();
+            }
+        }
+    
+        return suppliers.stream()
+            .map(supplier -> Converter.convertToDto(supplier, SupplierResponseDto.class))
+            .collect(Collectors.toList());
     }
-
-    return suppliers.stream()
-        .map(supplier -> Converter.convertToDto(supplier, SupplierResponseDto.class))
-        .collect(Collectors.toList());
-}
 
     
 

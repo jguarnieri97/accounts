@@ -6,8 +6,8 @@ import static org.mockito.Mockito.when;
 import java.util.List;
 import java.util.Set;
 
-import ar.edu.unlam.tpi.accounts.models.CompanyTypeEnum;
 import ar.edu.unlam.tpi.accounts.models.LabelEntity;
+import ar.edu.unlam.tpi.accounts.models.CategoryEntity;
 import ar.edu.unlam.tpi.accounts.models.SupplierCompanyEntity;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,6 +19,7 @@ import ar.edu.unlam.tpi.accounts.dto.response.SupplierResponseDto;
 import ar.edu.unlam.tpi.accounts.dto.response.WorkerResponseDto;
 import ar.edu.unlam.tpi.accounts.exceptions.NotFoundException;
 import ar.edu.unlam.tpi.accounts.persistence.dao.impl.ApplicantCompanyDAOImpl;
+import ar.edu.unlam.tpi.accounts.persistence.dao.impl.CategoryDAOImpl;
 import ar.edu.unlam.tpi.accounts.persistence.dao.impl.SupplierCompanyDAOImpl;
 import ar.edu.unlam.tpi.accounts.persistence.dao.impl.WorkerDAOImpl;
 import ar.edu.unlam.tpi.accounts.persistence.repository.CommentaryRepository;
@@ -42,6 +43,9 @@ public class AccountServiceImplTest {
 
     @Mock
     private ApplicantCompanyDAOImpl applicantCompanyDAO;
+
+    @Mock
+    private CategoryDAOImpl categoryDAOImpl;
 
     @InjectMocks
     private AccountServiceImpl accountServiceImpl;
@@ -95,29 +99,31 @@ public class AccountServiceImplTest {
         assertThrows(NotFoundException.class, ()->accountServiceImpl.getWorkersBySupplierCompanyId(1L));
     }
 
-   /* @Test
+    @Test
     void givenCategoryLocationAndWorkResume_whenGetAllSuppliers_thenReturnSupplierResponseDtoList() {
         // Given
         String category = "ELECTRICIAN";
         String workResume = "techo";
-        Integer categoryEnum = CompanyTypeEnum.valueOf(category).ordinal();
         Float lat = -34.6340f;
         Float ln = -58.4065f;
         Float radius = 10f;
     
-        // Simula una entidad de proveedor con un label que matchea con "techo"
+        // Simula una entidad de proveedor con un label que matchea con "roof_repair"
         LabelEntity label = new LabelEntity();
         label.setTag("roof_repair");
     
         SupplierCompanyEntity supplier = new SupplierCompanyEntity();
-        supplier.setLabels(Set.of(label)); // simulamos que tiene ese label
+        supplier.setLabels(Set.of(label)); // Simulamos que tiene ese label
     
         List<SupplierCompanyEntity> suppliers = List.of(supplier);
     
+        CategoryEntity categoryEntity = new CategoryEntity(0L, category); // Simula categoría encontrada
+    
         ReflectionTestUtils.setField(accountServiceImpl, "searchRadius", radius);
     
-        when(supplierCompanyDAO.findByCategoryAndLatAndLn(categoryEnum, lat, ln, radius))
-            .thenReturn(suppliers);
+        // Mocks
+        when(categoryDAOImpl.findByName(category)).thenReturn(categoryEntity);
+        when(supplierCompanyDAO.findByCategoryAndLatAndLn(categoryEntity.getId(), lat, ln, radius)).thenReturn(suppliers);
     
         // When
         List<SupplierResponseDto> result = accountServiceImpl.getAllSuppliers(category, lat, ln, workResume);
@@ -125,8 +131,8 @@ public class AccountServiceImplTest {
         // Then
         assertNotNull(result);
         assertEquals(1, result.size());
-        verify(supplierCompanyDAO).findByCategoryAndLatAndLn(categoryEnum, lat, ln, radius);
-    }*/
+        verify(supplierCompanyDAO).findByCategoryAndLatAndLn(categoryEntity.getId(), lat, ln, radius);
+    }
     
 
 }
