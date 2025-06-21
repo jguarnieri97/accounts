@@ -28,8 +28,9 @@ public class SupplierCompanyEntity extends CompanyEntity {
     @Column(name = "avg_score")
     private Float score;
 
-    @Column(name = "company_type")
-    private CompanyTypeEnum companyType;
+    @ManyToOne
+    @JoinColumn(name = "company_type")
+    private CategoryEntity companyType;
     
     @OneToMany(mappedBy = "supplierCompany", orphanRemoval = true)
     private Set<CommentaryEntity> commentaries = new HashSet<>();
