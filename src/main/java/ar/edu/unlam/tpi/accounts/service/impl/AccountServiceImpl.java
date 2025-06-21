@@ -5,7 +5,6 @@ import ar.edu.unlam.tpi.accounts.utils.Converter;
 import ar.edu.unlam.tpi.accounts.utils.MetricsCalculator;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -28,7 +27,6 @@ import ar.edu.unlam.tpi.accounts.models.CategoryEntity;
 import ar.edu.unlam.tpi.accounts.models.CommentaryEntity;
 import ar.edu.unlam.tpi.accounts.models.LabelEntity;
 import ar.edu.unlam.tpi.accounts.models.SupplierCompanyEntity;
-import ar.edu.unlam.tpi.accounts.mapper.LabelMapper;
 import ar.edu.unlam.tpi.accounts.exceptions.NotFoundException;
 
 @Service
@@ -42,7 +40,6 @@ public class AccountServiceImpl implements AccountService {
     private final CommentaryRepository commentaryRepository;
     private final ApplicantCompanyDAO applicantCompanyDAO;
     private final MetricsCalculator metricsCalculator;
-    private final LabelMapper labelMapper;
     private final CategoryDAO categoryDAO;
 
     @Value("${supplier.search.radius}")
@@ -63,23 +60,21 @@ public class AccountServiceImpl implements AccountService {
     
         suppliers.forEach(s -> {
             int labelSize = s.getLabels().size();
-            log.info("Supplier {} tiene {} labels: {}", s.getId(), labelSize, 
+            log.info("Supplier {} tiene {} labels: {}", s.getId(), labelSize,
                      s.getLabels().stream().map(LabelEntity::getTag).toList());
         });
-        log.info("💡 workResume recibido en servicio: '{}'", workResume);
-
+        log.info("💡 workResume (tag) recibido en servicio: '{}'", workResume);
+    
         if (workResume != null && !workResume.isBlank()) {
-            Optional<String> mappedTag = labelMapper.getLabelByWorkResume(workResume);
-            log.info("Tag mapeado desde '{}': {}", workResume, mappedTag);
-            if (mappedTag.isPresent()) {
-                String tag = mappedTag.get();
-                suppliers = suppliers.stream()
-                    .filter(supplier -> supplier.getLabels() != null &&
-                        supplier.getLabels().stream()
-                            .anyMatch(label -> label.getTag().equalsIgnoreCase(tag)))
-                    .toList();
-            } else {
-                throw new NotFoundException("No se encontró ningún proveedor con el tag mapeado");
+            String tag = workResume.trim();
+            suppliers = suppliers.stream()
+                .filter(supplier -> supplier.getLabels() != null &&
+                    supplier.getLabels().stream()
+                        .anyMatch(label -> label.getTag().equalsIgnoreCase(tag)))
+                .toList();
+    
+            if (suppliers.isEmpty()) {
+                throw new NotFoundException("No se encontró ningún proveedor con el tag: " + tag);
             }
         }
     
@@ -87,6 +82,7 @@ public class AccountServiceImpl implements AccountService {
             .map(supplier -> Converter.convertToDto(supplier, SupplierResponseDto.class))
             .collect(Collectors.toList());
     }
+    
 
     
 
