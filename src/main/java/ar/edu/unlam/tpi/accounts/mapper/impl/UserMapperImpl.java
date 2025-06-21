@@ -5,6 +5,10 @@ import ar.edu.unlam.tpi.accounts.mapper.UserMapper;
 import ar.edu.unlam.tpi.accounts.models.*;
 
 import ar.edu.unlam.tpi.accounts.utils.Converter;
+
+import java.util.Set;
+import java.util.stream.Collectors;
+
 import org.springframework.stereotype.Component;
 
 @Component
@@ -19,6 +23,15 @@ public class UserMapperImpl implements UserMapper {
         entity.setGeolocation(geo);
         entity.setIsVerified(true);
         entity.setIsActive(true);
+        if (req.getLabels() != null && !req.getLabels().isEmpty()) {
+            Set<LabelEntity> labelEntities = req.getLabels().stream()
+                .map(tag -> LabelEntity.builder()
+                        .tag(tag)
+                        .supplier(entity)
+                        .build())
+                .collect(Collectors.toSet());
+            entity.setLabels(labelEntities);
+        }
         return entity;
     }
 

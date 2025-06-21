@@ -4,7 +4,9 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.List;
+import java.util.Set;
 
+import ar.edu.unlam.tpi.accounts.models.LabelEntity;
 import ar.edu.unlam.tpi.accounts.models.CategoryEntity;
 import ar.edu.unlam.tpi.accounts.models.SupplierCompanyEntity;
 import org.junit.jupiter.api.Test;
@@ -98,28 +100,33 @@ public class AccountServiceImplTest {
     }
 
     @Test
-    void givenCategoryAndLocation_whenGetAllSuppliers_thenReturnSupplierResponseDtoList() {
-        // Given
+    void givenCategoryLocationAndWorkResume_whenGetAllSuppliers_thenReturnSupplierResponseDtoList() {
         String category = "ELECTRICIAN";
-        Long categoryEnum = 0L;
+        String workResume = "roof_repair"; // Ahora se usa directamente como tag
         Float lat = -34.6340f;
         Float ln = -58.4065f;
         Float radius = 10f;
-        List<SupplierCompanyEntity> suppliers = List.of(new SupplierCompanyEntity());
-
-        // Setea el valor de searchRadius en el servicio antes de llamar al método
+    
+        LabelEntity label = new LabelEntity();
+        label.setTag("roof_repair");
+    
+        SupplierCompanyEntity supplier = new SupplierCompanyEntity();
+        supplier.setLabels(Set.of(label));
+    
+        List<SupplierCompanyEntity> suppliers = List.of(supplier);
+    
+        CategoryEntity categoryEntity = new CategoryEntity(0L, category);
+    
         ReflectionTestUtils.setField(accountServiceImpl, "searchRadius", radius);
-
-        when(categoryDAOImpl.findByName(category)).thenReturn(new CategoryEntity(categoryEnum, category));
-        when(supplierCompanyDAO.findByCategoryAndLatAndLn(categoryEnum, lat, ln, radius)).thenReturn(suppliers);
-
-        // When
-        List<SupplierResponseDto> result = accountServiceImpl.getAllSuppliers(category, lat, ln);
-
-        // Then
+    
+        when(categoryDAOImpl.findByName(category)).thenReturn(categoryEntity);
+        when(supplierCompanyDAO.findByCategoryAndLatAndLn(categoryEntity.getId(), lat, ln, radius)).thenReturn(suppliers);
+    
+        List<SupplierResponseDto> result = accountServiceImpl.getAllSuppliers(category, lat, ln, workResume);
+    
         assertNotNull(result);
-        assertEquals(suppliers.size(), result.size());
-        verify(supplierCompanyDAO).findByCategoryAndLatAndLn(categoryEnum, lat, ln, radius);
+        assertEquals(1, result.size());
     }
+    
 
 }
