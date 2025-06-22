@@ -28,7 +28,8 @@ public interface AccountController {
     @Operation(summary = "Get all suppliers")
     GenericResponse<List<SupplierResponseDto>> getAllSuppliers(@RequestParam(required = false) String category,
                                                                @RequestParam(required = false) Float lat,
-                                                               @RequestParam(required = false) Float ln);
+                                                               @RequestParam(required = false) Float ln,
+                                                               @RequestParam(required = false) String workResume);
 
     /**
      * Busca un proveedor por su ID.

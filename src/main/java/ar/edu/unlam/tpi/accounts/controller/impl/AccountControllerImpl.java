@@ -24,10 +24,10 @@ public class AccountControllerImpl implements AccountController {
     private final AccountService accountService;
 
     @Override
-    public GenericResponse<List<SupplierResponseDto>> getAllSuppliers(String category, Float lat, Float ln) {
+    public GenericResponse<List<SupplierResponseDto>> getAllSuppliers(String category, Float lat, Float ln, String workResume) {
         return GenericResponse.<List<SupplierResponseDto>>builder()
                 .code(Constants.STATUS_OK)
-                .data(accountService.getAllSuppliers(category, lat, ln))
+                .data(accountService.getAllSuppliers(category, lat, ln, workResume))
                 .message(Constants.SUCCESS_MESSAGE)
                 .build();
     }

@@ -25,7 +25,9 @@ import ar.edu.unlam.tpi.accounts.dto.response.WorkerResponseDto;
 import ar.edu.unlam.tpi.accounts.models.ApplicantCompanyEntity;
 import ar.edu.unlam.tpi.accounts.models.CategoryEntity;
 import ar.edu.unlam.tpi.accounts.models.CommentaryEntity;
+import ar.edu.unlam.tpi.accounts.models.LabelEntity;
 import ar.edu.unlam.tpi.accounts.models.SupplierCompanyEntity;
+
 
 @Service
 @Transactional
@@ -43,15 +45,44 @@ public class AccountServiceImpl implements AccountService {
     @Value("${supplier.search.radius}")
     private Float searchRadius;
 
+
     @Override
-    public List<SupplierResponseDto> getAllSuppliers(String category, Float lat, Float ln) {
-        //Integer companyTypeOrdinal = category != null ? CompanyTypeEnum.valueOf(category).ordinal() : null;
-        CategoryEntity categoryType = categoryDAO.findByName(category);
-        return supplierCompanyDAO.findByCategoryAndLatAndLn(categoryType.getId(), lat, ln, searchRadius)
-            .stream()
+    public List<SupplierResponseDto> getAllSuppliers(String category, Float lat, Float ln, String workResume) {
+        Long categoryId = null;
+        log.info("🔍 Filtro recibido: category={}, workResume='{}'", category, workResume);
+
+        if (category != null) {
+            CategoryEntity categoryType = categoryDAO.findByName(category);
+            categoryId = categoryType != null ? categoryType.getId() : null;
+        }
+    
+        List<SupplierCompanyEntity> suppliers = supplierCompanyDAO.findByCategoryAndLatAndLn(
+            categoryId, lat, ln, searchRadius
+        );
+    
+        suppliers.forEach(s -> {
+            int labelSize = s.getLabels().size();
+            log.info("Supplier {} tiene {} labels: {}", s.getId(), labelSize,
+                     s.getLabels().stream().map(LabelEntity::getTag).toList());
+        });
+        log.info("💡 workResume (tag) recibido en servicio: '{}'", workResume);
+    
+        if (workResume != null && !workResume.isBlank()) {
+            String tag = workResume.trim();
+            suppliers = suppliers.stream()
+                .filter(supplier -> supplier.getLabels() != null &&
+                    supplier.getLabels().stream()
+                        .anyMatch(label -> label.getTag().equalsIgnoreCase(tag)))
+                .toList();
+        }
+    
+        return suppliers.stream()
             .map(supplier -> Converter.convertToDto(supplier, SupplierResponseDto.class))
             .collect(Collectors.toList());
     }
+    
+
+    
 
     @Override
     public SupplierResponseDto getSupplierById(Long id) {

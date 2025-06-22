@@ -3,6 +3,7 @@ package ar.edu.unlam.tpi.accounts.controller.impl;
 import ar.edu.unlam.tpi.accounts.controller.UserController;
 import ar.edu.unlam.tpi.accounts.dto.request.EmailRequest;
 import ar.edu.unlam.tpi.accounts.dto.request.UserRequest;
+import ar.edu.unlam.tpi.accounts.dto.request.UserRegisterRequestDto;
 import ar.edu.unlam.tpi.accounts.dto.response.GenericResponse;
 import ar.edu.unlam.tpi.accounts.dto.response.UserCreatedResponse;
 import ar.edu.unlam.tpi.accounts.dto.response.UserDetailResponse;
@@ -14,7 +15,12 @@ import lombok.RequiredArgsConstructor;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import jakarta.validation.Valid;
 
 @RestController
 @RequiredArgsConstructor
@@ -42,13 +48,16 @@ public class UserControllerImpl implements UserController {
                 .build();
     }
 
-    @Override
-    public GenericResponse<UserCreatedResponse> createUser(Map<String, Object> request) {
-        var response = userService.createUser(request);
+    @PostMapping("/save")
+    @ResponseStatus(HttpStatus.OK)
+    public GenericResponse<UserCreatedResponse> createUser(@RequestBody @Valid UserRegisterRequestDto request) {
+        request.validate();
+        var created = userService.register(request);
         return GenericResponse.<UserCreatedResponse>builder()
-                .code(Constants.STATUS_CREATED)
-                .message(Constants.SUCCESS_MESSAGE)
-                .data(response)
+                .code(200)
+                .message("Usuario creado exitosamente")
+                .data(created)
                 .build();
     }
+
 }

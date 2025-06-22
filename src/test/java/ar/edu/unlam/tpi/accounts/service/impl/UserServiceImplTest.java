@@ -2,22 +2,16 @@ package ar.edu.unlam.tpi.accounts.service.impl;
 
 import ar.edu.unlam.tpi.accounts.controller.impl.UserControllerImpl;
 import ar.edu.unlam.tpi.accounts.dto.request.UserRequest;
-import ar.edu.unlam.tpi.accounts.dto.request.SupplierRegisterRequestDto;
-import ar.edu.unlam.tpi.accounts.dto.request.WorkerRegisterRequestDto;
-import ar.edu.unlam.tpi.accounts.dto.request.ApplicantRegisterRequestDto;
+import ar.edu.unlam.tpi.accounts.dto.request.UserRegisterRequestDto;
 import ar.edu.unlam.tpi.accounts.dto.response.GenericResponse;
 import ar.edu.unlam.tpi.accounts.dto.response.UserDetailResponse;
 import ar.edu.unlam.tpi.accounts.dto.response.UserResponse;
-import ar.edu.unlam.tpi.accounts.mapper.UserMapper;
-import ar.edu.unlam.tpi.accounts.mapper.UserRequestFactory;
 import ar.edu.unlam.tpi.accounts.dto.response.UserCreatedResponse;
 import ar.edu.unlam.tpi.accounts.models.SupplierCompanyEntity;
 import ar.edu.unlam.tpi.accounts.models.WorkerEntity;
 import ar.edu.unlam.tpi.accounts.models.ApplicantCompanyEntity;
-import ar.edu.unlam.tpi.accounts.persistence.dao.SupplierCompanyDAO;
-import ar.edu.unlam.tpi.accounts.persistence.dao.WorkerDAO;
-import ar.edu.unlam.tpi.accounts.persistence.dao.ApplicantCompanyDAO;
 import ar.edu.unlam.tpi.accounts.service.UserService;
+import ar.edu.unlam.tpi.accounts.service.strategy.UserRegisterStrategy;
 import ar.edu.unlam.tpi.accounts.utils.Constants;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -38,22 +32,16 @@ import static org.mockito.Mockito.any;
 public class UserServiceImplTest {
 
     @Mock
-    private UserRequestFactory userRequestFactory;
-
-    @Mock
-    private SupplierCompanyDAO supplierCompanyDAO;
-
-    @Mock
-    private WorkerDAO workerDAO;
-
-    @Mock
-    private ApplicantCompanyDAO applicantCompanyDAO;
-
-    @Mock
-    private UserMapper userMapper;
-
-    @Mock
     private UserService userService;
+
+    @Mock
+    private UserRegisterStrategy supplierStrategy;
+
+    @Mock
+    private UserRegisterStrategy applicantStrategy;
+
+    @Mock
+    private UserRegisterStrategy workerStrategy;
 
     @InjectMocks
     private UserControllerImpl controller;
@@ -67,8 +55,7 @@ public class UserServiceImplTest {
         List<UserRequest> userRequests = List.of(
                 UserRequest.builder().userId(1L).type("applicant").build(),
                 UserRequest.builder().userId(2L).type("supplier").build(),
-                UserRequest.builder().userId(3L).type("worker").build()
-        );
+                UserRequest.builder().userId(3L).type("worker").build());
 
         UserResponse mockResponse = UserResponse.builder()
                 .applicants(List.of(UserDetailResponse.builder().id(1L).name("Empresa Uno").build()))
@@ -92,81 +79,69 @@ public class UserServiceImplTest {
     }
 
     @Test
-    void givenWorkerRequest_whenCreateUser_thenReturnsUserCreatedResponse() {
+    void givenSupplierRequest_whenRegister_thenUsesSupplierStrategy() {
         // Arrange
-        Map<String, Object> requestJson = Map.of("type", "worker", "companyId", 1L, "name", "Juan");
+        UserRegisterRequestDto request = new UserRegisterRequestDto();
+        request.setType("supplier");
 
-        WorkerRegisterRequestDto dto = new WorkerRegisterRequestDto();
-        dto.setCompanyId(1L);
-        dto.setName("Juan");
+        UserCreatedResponse expected = new UserCreatedResponse(77L);
 
-        SupplierCompanyEntity supplier = new SupplierCompanyEntity();
-        WorkerEntity worker = new WorkerEntity();
-        worker.setId(77L);
+        when(supplierStrategy.supports("supplier")).thenReturn(true);
+        when(supplierStrategy.register(request)).thenReturn(expected);
 
-        when(userRequestFactory.resolve(requestJson)).thenReturn(dto);
-        when(supplierCompanyDAO.findById(1L)).thenReturn(supplier);
-        when(userMapper.toWorkerEntity(dto, supplier)).thenReturn(worker);
-        when(workerDAO.save(any(WorkerEntity.class))).thenReturn(worker);
+        userService = new UserServiceImpl(null, List.of(supplierStrategy, applicantStrategy, workerStrategy));
 
         // Act
-        UserCreatedResponse response = userServiceImpl.createUser(requestJson);
+        UserCreatedResponse response = userService.register(request);
 
         // Assert
         assertNotNull(response);
         assertEquals(77L, response.getId());
-        verify(workerDAO).save(any(WorkerEntity.class));
+        verify(supplierStrategy).register(request);
     }
 
     @Test
-    void givenSupplierRequest_whenCreateUser_thenReturnsUserCreatedResponse() {
+    void givenWorkerRequest_whenRegister_thenUsesWorkerStrategy() {
         // Arrange
-        Map<String, Object> requestJson = Map.of("type", "supplier", "name", "Empresa Uno", "lat", 1.0, "ln", 1.0);
+        UserRegisterRequestDto request = new UserRegisterRequestDto();
+        request.setType("worker");
 
-        SupplierRegisterRequestDto dto = new SupplierRegisterRequestDto();
-        dto.setName("Empresa Uno");
-        dto.setLat(1.0f);
-        dto.setLn(1.0f);
+        UserCreatedResponse expected = new UserCreatedResponse(99L);
 
-        SupplierCompanyEntity supplier = new SupplierCompanyEntity();
-        supplier.setId(77L);
+        when(workerStrategy.supports("worker")).thenReturn(true);
+        when(workerStrategy.register(request)).thenReturn(expected);
 
-        when(userRequestFactory.resolve(requestJson)).thenReturn(dto);
-        when(userMapper.toSupplierEntity(dto)).thenReturn(supplier);
-        when(supplierCompanyDAO.save(any(SupplierCompanyEntity.class))).thenReturn(supplier);
+        userService = new UserServiceImpl(null, List.of(supplierStrategy, applicantStrategy, workerStrategy));
 
         // Act
-        UserCreatedResponse response = userServiceImpl.createUser(requestJson);
+        UserCreatedResponse response = userService.register(request);
 
         // Assert
         assertNotNull(response);
-        assertEquals(77L, response.getId());
-        verify(supplierCompanyDAO).save(any(SupplierCompanyEntity.class));
-    }          
+        assertEquals(99L, response.getId());
+        verify(workerStrategy).register(request);
+    }
 
     @Test
-    void givenApplicantRequest_whenCreateUser_thenReturnsUserCreatedResponse() {
+    void givenApplicantRequest_whenRegister_thenUsesApplicantStrategy() {
         // Arrange
-        Map<String, Object> requestJson = Map.of("type", "applicant", "name", "Empresa Uno", "lat", 1.0, "ln", 1.0);
+        UserRegisterRequestDto request = new UserRegisterRequestDto();
+        request.setType("applicant");
 
-        ApplicantRegisterRequestDto dto = new ApplicantRegisterRequestDto();
-        dto.setName("Empresa Uno");
-        dto.setLat(1.0f);
-        dto.setLn(1.0f);
+        UserCreatedResponse expected = new UserCreatedResponse(55L);
 
-        ApplicantCompanyEntity applicant = new ApplicantCompanyEntity();
-        applicant.setId(77L);
+        when(applicantStrategy.supports("applicant")).thenReturn(true);
+        when(applicantStrategy.register(request)).thenReturn(expected);
 
-        when(userRequestFactory.resolve(requestJson)).thenReturn(dto);
-        when(userMapper.toApplicantEntity(dto)).thenReturn(applicant);
-        when(applicantCompanyDAO.save(any(ApplicantCompanyEntity.class))).thenReturn(applicant);
+        userService = new UserServiceImpl(null, List.of(supplierStrategy, applicantStrategy, workerStrategy));
 
         // Act
-        UserCreatedResponse response = userServiceImpl.createUser(requestJson);
+        UserCreatedResponse response = userService.register(request);
 
         // Assert
         assertNotNull(response);
-        assertEquals(77L, response.getId());
-        verify(applicantCompanyDAO).save(any(ApplicantCompanyEntity.class));
-    }           
+        assertEquals(55L, response.getId());
+        verify(applicantStrategy).register(request);
+    }
+
 }
