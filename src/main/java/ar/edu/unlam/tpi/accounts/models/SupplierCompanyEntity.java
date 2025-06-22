@@ -35,7 +35,12 @@ public class SupplierCompanyEntity extends CompanyEntity {
     @OneToMany(mappedBy = "supplierCompany", orphanRemoval = true)
     private Set<CommentaryEntity> commentaries = new HashSet<>();
 
-    @OneToMany(mappedBy = "supplier", cascade = CascadeType.ALL, orphanRemoval = true)
+    @ManyToMany
+    @JoinTable(
+        name = "SUPPLIER_LABEL", schema = "USERS",
+        joinColumns = @JoinColumn(name = "supplier_id"),
+        inverseJoinColumns = @JoinColumn(name = "label_id")
+    )
     private Set<LabelEntity> labels = new HashSet<>();
     
 }

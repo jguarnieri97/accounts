@@ -1,5 +1,8 @@
 package ar.edu.unlam.tpi.accounts.models;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -18,7 +21,10 @@ public class LabelEntity {
 
     private String tag;
 
+    @ManyToMany(mappedBy = "labels")
+    private Set<SupplierCompanyEntity> suppliers = new HashSet<>();
+
     @ManyToOne
-    @JoinColumn(name = "supplier_id")
-    private SupplierCompanyEntity supplier;
+    @JoinColumn(name = "category_id")
+    private CategoryEntity category;
 }
