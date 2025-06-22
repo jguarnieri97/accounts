@@ -1,32 +1,24 @@
 package ar.edu.unlam.tpi.accounts.service.impl;
 
-import ar.edu.unlam.tpi.accounts.dto.request.BaseUserRegisterRequestDto;
 import ar.edu.unlam.tpi.accounts.dto.request.EmailRequest;
 import ar.edu.unlam.tpi.accounts.dto.request.UserDetailRequest;
+import ar.edu.unlam.tpi.accounts.dto.request.UserRegisterRequestDto;
 import ar.edu.unlam.tpi.accounts.dto.response.UserCreatedResponse;
 import ar.edu.unlam.tpi.accounts.dto.response.UserDetailResponse;
 import ar.edu.unlam.tpi.accounts.exceptions.NotFoundException;
-import ar.edu.unlam.tpi.accounts.exceptions.GenericException;
 import ar.edu.unlam.tpi.accounts.models.UserEntity;
 import ar.edu.unlam.tpi.accounts.service.UserService;
 import ar.edu.unlam.tpi.accounts.service.strategy.UserDetailStrategy;
+import ar.edu.unlam.tpi.accounts.service.strategy.UserRegisterStrategy;
 import ar.edu.unlam.tpi.accounts.utils.UserDetailResponseBuilder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import java.util.List;
-import java.util.Map;
 import java.util.ArrayList;
 import ar.edu.unlam.tpi.accounts.dto.request.UserRequest;
 import ar.edu.unlam.tpi.accounts.dto.response.UserResponse;
-import ar.edu.unlam.tpi.accounts.mapper.UserRequestFactory;
-import ar.edu.unlam.tpi.accounts.persistence.dao.SupplierCompanyDAO;
-import ar.edu.unlam.tpi.accounts.persistence.dao.WorkerDAO;
-import ar.edu.unlam.tpi.accounts.persistence.dao.ApplicantCompanyDAO;
-import ar.edu.unlam.tpi.accounts.dto.request.SupplierRegisterRequestDto;
-import ar.edu.unlam.tpi.accounts.dto.request.WorkerRegisterRequestDto;
-import ar.edu.unlam.tpi.accounts.dto.request.ApplicantRegisterRequestDto;
-import ar.edu.unlam.tpi.accounts.mapper.UserMapper;
+
 
 @Slf4j
 @Service
@@ -34,11 +26,8 @@ import ar.edu.unlam.tpi.accounts.mapper.UserMapper;
 public class UserServiceImpl implements UserService {
 
     private final List<UserDetailStrategy> strategies;
-    private final UserRequestFactory userRequestFactory;
-    private final SupplierCompanyDAO supplierCompanyDAO;
-    private final WorkerDAO workerDAO;
-    private final ApplicantCompanyDAO applicantCompanyDAO;
-    private final UserMapper userMapper;
+    private final List<UserRegisterStrategy> registerStrategies;
+
     @Override
     public UserResponse getUsersDetail(List<UserRequest> userRequests) {
         List<UserDetailResponse> applicants = new ArrayList<>();
@@ -104,30 +93,15 @@ public class UserServiceImpl implements UserService {
                 });
     }
 
-    @Override
-    public UserCreatedResponse createUser(Map<String, Object> request) {
-        BaseUserRegisterRequestDto userRequest = userRequestFactory.resolve(request);
-    
-        if (userRequest instanceof SupplierRegisterRequestDto supplierReq) {
-            var entity = userMapper.toSupplierEntity(supplierReq);
-            var saved = supplierCompanyDAO.save(entity);
-            return UserCreatedResponse.builder().id(saved.getId()).build();
-    
-        } else if (userRequest instanceof WorkerRegisterRequestDto workerReq) {
-            System.out.println("userRequest instanceof WorkerRegisterRequestDto? " + (userRequest instanceof WorkerRegisterRequestDto));
-System.out.println("userRequest actual class: " + userRequest.getClass());
 
-            var supplier = supplierCompanyDAO.findById(workerReq.getCompanyId());
-            var entity = userMapper.toWorkerEntity(workerReq, supplier);
-            var saved = workerDAO.save(entity);
-            return UserCreatedResponse.builder().id(saved.getId()).build();
-    
-        } else if (userRequest instanceof ApplicantRegisterRequestDto applicantReq) {
-            var entity = userMapper.toApplicantEntity(applicantReq);
-            var saved = applicantCompanyDAO.save(entity);
-            return UserCreatedResponse.builder().id(saved.getId()).build();
-        }
-        return null;
+    @Override
+    public UserCreatedResponse register(UserRegisterRequestDto request) {
+        UserRegisterStrategy strategy = registerStrategies.stream()
+                .filter(s -> s.supports(request.getType()))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Tipo de usuario inválido: " + request.getType()));
+
+        return strategy.register(request);
     }
 
     

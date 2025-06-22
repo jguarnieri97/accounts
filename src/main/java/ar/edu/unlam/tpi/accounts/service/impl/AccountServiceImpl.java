@@ -27,7 +27,7 @@ import ar.edu.unlam.tpi.accounts.models.CategoryEntity;
 import ar.edu.unlam.tpi.accounts.models.CommentaryEntity;
 import ar.edu.unlam.tpi.accounts.models.LabelEntity;
 import ar.edu.unlam.tpi.accounts.models.SupplierCompanyEntity;
-import ar.edu.unlam.tpi.accounts.exceptions.NotFoundException;
+
 
 @Service
 @Transactional
@@ -49,6 +49,8 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public List<SupplierResponseDto> getAllSuppliers(String category, Float lat, Float ln, String workResume) {
         Long categoryId = null;
+        log.info("🔍 Filtro recibido: category={}, workResume='{}'", category, workResume);
+
         if (category != null) {
             CategoryEntity categoryType = categoryDAO.findByName(category);
             categoryId = categoryType != null ? categoryType.getId() : null;
@@ -72,10 +74,6 @@ public class AccountServiceImpl implements AccountService {
                     supplier.getLabels().stream()
                         .anyMatch(label -> label.getTag().equalsIgnoreCase(tag)))
                 .toList();
-    
-            if (suppliers.isEmpty()) {
-                throw new NotFoundException("No se encontró ningún proveedor con el tag: " + tag);
-            }
         }
     
         return suppliers.stream()

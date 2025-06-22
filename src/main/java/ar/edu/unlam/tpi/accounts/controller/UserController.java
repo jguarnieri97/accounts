@@ -2,6 +2,7 @@ package ar.edu.unlam.tpi.accounts.controller;
 
 import ar.edu.unlam.tpi.accounts.dto.request.EmailRequest;
 import ar.edu.unlam.tpi.accounts.dto.request.UserRequest;
+import ar.edu.unlam.tpi.accounts.dto.request.UserRegisterRequestDto;
 import ar.edu.unlam.tpi.accounts.dto.response.UserCreatedResponse;
 import ar.edu.unlam.tpi.accounts.dto.response.UserDetailResponse;
 import ar.edu.unlam.tpi.accounts.dto.response.UserResponse;
@@ -11,7 +12,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @Tag(name = "User Controller", description = "Operaciones relacionadas con usuarios")
 @RequestMapping("/accounts/v1/users")
@@ -27,6 +27,6 @@ public interface UserController {
 
     @PostMapping("/save")
     @ResponseStatus(HttpStatus.OK)
-    GenericResponse<UserCreatedResponse> createUser(@RequestBody Map<String, Object> request);
+    GenericResponse<UserCreatedResponse> createUser(@RequestBody UserRegisterRequestDto request);
 }
 
