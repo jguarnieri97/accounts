@@ -67,12 +67,23 @@ CREATE TABLE USERS.COMMENTARY
     FOREIGN KEY (applicant_id) REFERENCES USERS.APPLICANT_COMPANY (id)
 );
 
+DROP TABLE IF EXISTS USERS.LABEL;
+
 CREATE TABLE USERS.LABEL (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    tag VARCHAR(255),
-    supplier_id BIGINT,
-    CONSTRAINT fk_supplier FOREIGN KEY (supplier_id) REFERENCES USERS.SUPPLIER_COMPANY(id)
+    tag VARCHAR(255) NOT NULL,
+    category_id BIGINT,
+    FOREIGN KEY (category_id) REFERENCES USERS.CATEGORY(id)
 );
+
+CREATE TABLE USERS.SUPPLIER_LABEL (
+    supplier_id BIGINT NOT NULL,
+    label_id BIGINT NOT NULL,
+    PRIMARY KEY (supplier_id, label_id),
+    FOREIGN KEY (supplier_id) REFERENCES USERS.SUPPLIER_COMPANY(id),
+    FOREIGN KEY (label_id) REFERENCES USERS.LABEL(id)
+);
+
 
 -- CREACION DE CATEGORIAS--
 INSERT INTO USERS.CATEGORY (name)
@@ -206,3 +217,30 @@ INSERT INTO USERS.APPLICANT_COMPANY
 (email, user_name, phone, user_address, cuit, is_active, lat, ln, is_verified, company_description)
 VALUES
     ('rrhh@byteflow.io', 'ByteFlow', '1144556677', 'Av. Illia 2900, San Justo', '30-60456789-1', 1, -31.6333, -60.7000, 1, 'Desarrollo de plataformas móviles, front-end y soluciones UX/UI para startups');
+
+
+INSERT INTO USERS.LABEL (tag, category_id) VALUES
+  ('electrical_wiring_repair', 1),
+  ('electrical_maintenance', 1),
+  ('light_repair', 1),
+  ('light_systems', 1),
+  ('electrical_failures', 1),
+  ('electrical_wiring', 1),
+  ('power_outlets', 1);
+
+-- Etiquetas para Contratistas (category_id = 2)
+INSERT INTO USERS.LABEL (tag, category_id) VALUES
+  ('roof_repair', 2),
+  ('wall_repair', 2),
+  ('painting', 2),
+  ('infrastructure_repair', 2),
+  ('infrastructure_build', 2),
+  ('unplastered', 2);
+
+-- Etiquetas para Limpieza (category_id = 3)
+INSERT INTO USERS.LABEL (tag, category_id) VALUES
+  ('office_cleaning', 3),
+  ('window_cleaning', 3),
+  ('floor_cleaning', 3),
+  ('post_construct_cleaning', 3),
+  ('sanitary_cleaning', 3);
