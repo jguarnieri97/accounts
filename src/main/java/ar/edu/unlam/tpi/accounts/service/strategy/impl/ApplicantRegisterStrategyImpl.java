@@ -23,7 +23,6 @@ public class ApplicantRegisterStrategyImpl implements UserRegisterStrategy {
 
     @Override
     public UserCreatedResponse register(UserRegisterRequestDto request) {
-        request.validate();
 
         ApplicantCompanyEntity applicant = ApplicantCompanyEntity.builder()
             .email(request.getEmail())

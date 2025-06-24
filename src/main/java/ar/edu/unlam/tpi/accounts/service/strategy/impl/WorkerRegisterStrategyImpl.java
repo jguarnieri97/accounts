@@ -26,7 +26,6 @@ public class WorkerRegisterStrategyImpl implements UserRegisterStrategy {
 
     @Override
     public UserCreatedResponse register(UserRegisterRequestDto request) {
-        request.validate();
 
         SupplierCompanyEntity company = supplierDao.findById(request.getCompanyId());
         if (company == null) {
