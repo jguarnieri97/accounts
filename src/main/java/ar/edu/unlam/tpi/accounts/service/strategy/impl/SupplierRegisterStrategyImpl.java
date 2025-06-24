@@ -33,7 +33,6 @@ public class SupplierRegisterStrategyImpl implements UserRegisterStrategy {
 
     @Override
 public UserCreatedResponse register(UserRegisterRequestDto request) {
-    request.validate();
 
     CategoryEntity category = categoryDAO.findByName(request.getCategory());
     if (category == null) {

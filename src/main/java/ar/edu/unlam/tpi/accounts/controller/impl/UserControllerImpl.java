@@ -10,6 +10,7 @@ import ar.edu.unlam.tpi.accounts.dto.response.UserDetailResponse;
 import ar.edu.unlam.tpi.accounts.dto.response.UserResponse;
 import ar.edu.unlam.tpi.accounts.service.UserService;
 import ar.edu.unlam.tpi.accounts.utils.Constants;
+import ar.edu.unlam.tpi.accounts.utils.Validation;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
@@ -51,7 +52,7 @@ public class UserControllerImpl implements UserController {
     @PostMapping("/save")
     @ResponseStatus(HttpStatus.OK)
     public GenericResponse<UserCreatedResponse> createUser(@RequestBody @Valid UserRegisterRequestDto request) {
-        request.validate();
+        Validation.validate(request);
         var created = userService.register(request);
         return GenericResponse.<UserCreatedResponse>builder()
                 .code(200)

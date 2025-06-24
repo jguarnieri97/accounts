@@ -38,40 +38,5 @@ public class UserRegisterRequestDto {
     private String category;
     private Long companyId;
 
-    // Validación dinámica según type
-    public void validate() {
-        switch (type.toLowerCase()) {
-            case "supplier" -> {
-                requireNonNull(lat, "lat");
-                requireNonNull(ln, "ln");
-                requireNonEmpty(description, "description");
-                requireNonEmpty(category, "category");
-                requireNonEmpty(labels, "labels");
-            }
-            case "applicant" -> {
-                requireNonNull(lat, "lat");
-                requireNonNull(ln, "ln");
-                requireNonEmpty(description, "description");
-                requireNonEmpty(category, "category");
-            }
-            case "worker" -> {
-                requireNonNull(companyId, "companyId");
-            }
-            default -> throw new IllegalArgumentException("Tipo de usuario inválido: " + type);
-        }
-    }
 
-    private void requireNonNull(Object value, String fieldName) {
-        if (value == null) {
-            throw new IllegalArgumentException("El campo '" + fieldName + "' es obligatorio para el tipo '" + type + "'");
-        }
-    }
-
-    private void requireNonEmpty(Object value, String fieldName) {
-        if (value == null ||
-            (value instanceof String s && s.isBlank()) ||
-            (value instanceof List<?> list && list.isEmpty())) {
-            throw new IllegalArgumentException("El campo '" + fieldName + "' es obligatorio para el tipo '" + type + "'");
-        }
-    }
 }

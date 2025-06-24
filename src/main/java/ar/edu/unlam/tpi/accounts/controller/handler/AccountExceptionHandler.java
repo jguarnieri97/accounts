@@ -1,5 +1,7 @@
 package ar.edu.unlam.tpi.accounts.controller.handler;
 
+import ar.edu.unlam.tpi.accounts.utils.Constants;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -43,6 +45,17 @@ public class AccountExceptionHandler {
                 .message(ex.getMessage())
                 .detail(ex.getDetail())
                 .build());
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<ErrorResponseDto> handleIllegalArgumentException(IllegalArgumentException ex) {
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(ErrorResponseDto.builder()
+                        .code(Constants.STATUS_BAD_REQUEST)
+                        .message(Constants.BAD_REQUEST_ERROR)
+                        .detail(ex.getMessage())
+                        .build());
     }
 
 }
