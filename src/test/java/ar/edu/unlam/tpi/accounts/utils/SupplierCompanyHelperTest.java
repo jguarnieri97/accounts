@@ -3,6 +3,7 @@ package ar.edu.unlam.tpi.accounts.utils;
 import lombok.experimental.UtilityClass;
 import java.util.List;
 
+import ar.edu.unlam.tpi.accounts.dto.request.UserRegisterRequestDto;
 import ar.edu.unlam.tpi.accounts.dto.response.SupplierResponseDto;
 import ar.edu.unlam.tpi.accounts.models.SupplierCompanyEntity;
 
@@ -84,4 +85,20 @@ public class SupplierCompanyHelperTest {
             .commentsCount(15)
             .build();
     }
+    public static UserRegisterRequestDto buildSupplierRegisterRequest() {
+        UserRegisterRequestDto request = new UserRegisterRequestDto();
+        request.setType("supplier");
+        request.setEmail("proveedor@empresa.com");
+        request.setName("Proveedor S.A.");
+        request.setPhone("123456789");
+        request.setAddress("Calle Falsa 123");
+        request.setCuit("20-12345678-9");
+        request.setCategory("CONTRACTOR");
+        request.setLabels(List.of("wall_repair", "roof_repair"));
+        request.setLat(-34.6037f);
+        request.setLn(-58.3816f);
+        request.setDescription("Empresa dedicada a limpieza profesional");
+        return request;
+    }
+    
 }
