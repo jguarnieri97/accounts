@@ -34,7 +34,6 @@ public class ApplicantCompanyHelperTest {
         );
     }
 
-
     public static UserRegisterRequestDto buildApplicantRegisterRequest() {
         UserRegisterRequestDto request = new UserRegisterRequestDto();
         request.setType("applicant");

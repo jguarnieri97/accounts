@@ -19,6 +19,7 @@ public class WorkerDataHelperTest {
                 .address("Calle 123, Ciudad")
                 .cuit("20-12345678-9")
                 .isActive(true)
+                .company(SupplierCompanyHelperTest.getSupplier())
                 .build(),
             WorkerEntity.builder()
                 .name("María García")
@@ -27,6 +28,7 @@ public class WorkerDataHelperTest {
                 .address("Calle 124, Ciudad")
                 .cuit("20-12345679-0")
                 .isActive(true)
+                .company(SupplierCompanyHelperTest.getSupplier())
                 .build()
         );
     }
