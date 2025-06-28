@@ -10,7 +10,7 @@ import ar.edu.unlam.tpi.accounts.dto.response.GenericResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-
+import jakarta.validation.Valid;
 import java.util.List;
 
 @Tag(name = "User Controller", description = "Operaciones relacionadas con usuarios")
@@ -27,6 +27,6 @@ public interface UserController {
 
     @PostMapping("/save")
     @ResponseStatus(HttpStatus.OK)
-    GenericResponse<UserCreatedResponse> createUser(@RequestBody UserRegisterRequestDto request);
+    GenericResponse<UserCreatedResponse> createUser(@RequestBody @Valid UserRegisterRequestDto request);
 }
 
